@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add new item</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+      
+</head>
+<body>
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-body">
+                    <a href="" class="btn btn-success btn-sm text-white" title="add new item">
+                        <i class="fa fa-plus" aria-hidden="true"></i><b> add new</b>
+                    </a>
+                    <br/>
+                    <br/>
+                    <div class="table-responsive">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                name
+                            </th>
+                            <th>
+                                descriptions
+                            </th>
+                            <th>
+                                size
+                            </th>
+                            <th>
+                                price
+                            </th>
+                            <th class="text-center">
+                                actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in myitems %}
+                        <tr>
+                            <td>
+                                {{ item.id }}
+                            </td>
+                            <td>
+                                {{ item.name }}
+                            </td>
+                            <td id="item">
+                                {{ item.description }}
+                            </td>
+                            <td>
+                                {{ item.size }}
+                            </td>
+                            <td>
+                                {{ item.price }}
+                            </td>
+                            <td class="project-actions text-right">
+                                <a href="/item/{{item.id}}" title="view item"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> view</button></a>
+                                <a href="/item/edit/{{item.id}}" title="edit item"><button class="btn btn-primary btn-sm"><i class="fa fa-pen-square" aria-hidden="true"></i> edit</button></a>
+                                <form method="POST" action="/item/{{item.id}}" accept-charset="UTF-8" style="display:inline">
+                                    
+                                    <button type="submit" class="btn btn-danger btn-sm" title="delete item" ><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+</body>
+</html>
