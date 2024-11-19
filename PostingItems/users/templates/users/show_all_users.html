@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block script_before_body %}
+
+{% endblock %}
+
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Users</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-body">
+                    <a href="/users/register/" class="btn btn-success btn-sm text-white" title="Register New User">
+                        <i class="fa fa-plus" aria-hidden="true"></i><b> Register New User</b>
+                    </a>
+                    <br/>
+                    <br/>
+                    <div class="table-responsive">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%">
+                                #
+                            </th>
+                            <th style="width: 25%">
+                                FirstName
+                            </th>
+                            <th style="width: 20%">
+                                Username
+                            </th>
+                            <th style="width: 40%">
+                                Email
+                            </th>
+                            <th class="text-center" style="width: 10%">
+                                Actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in myusers %}
+                        <tr>
+                            <td>
+                                {{ user.id }}
+                            </td>
+                            <td>
+                                {{ user.first_name }}
+                            </td>
+                            <td>
+                                {{ user.username }}
+                            </td>
+                            <td>
+                                {{ user.email }}
+                            </td>
+                            <td class="project-actions text-right">
+                                <form method="POST" action="/users/{{user.id}}" accept-charset="UTF-8" style="display:inline">
+                                    
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Inactive User" ><i class="fas fa-ban nav-icon" aria-hidden="true"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+{% block script %}
+    <!-- DataTables  & Plugins -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script >
+        $(document).ready(function() {
+
+            $('#example1').DataTable( {
+                order: [[0, 'desc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 },
+                    { searchable: false, targets: -1 },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        customize: function (doc) {
+                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    'colvis'
+                ]
+            } );
+
+            //for hiding flash message
+            setTimeout(function(){
+                $("#unsuccessMessage").remove();
+                $("#success").remove();
+            }, 2500 );
+        } );
+
+        function areYouSureFunc()
+        {
+            return confirm('Are you sure?');
+        }
+
+    </script>
+    {% endblock script %}
+
+    {% block last_style %}
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <style>
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding : 0px;
+            margin-left: 0px;
+            display: inline;
+            border: 0px;
+            gap: 0px; /* Remove spacing between buttons */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            border: 0px;
+        }
+    </style>
+    
+    {% endblock last_style %}

@@ -1,20 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-      <title>Dashboard</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-      
+{% extends "layout.html" %}
+
+
+{% block script_before_body %}
+
+{% endblock %}
+
+{% block style %}
 
 <style>
-
-
+    .small-box .inner {
+        height: 150px;
+        overflow: hidden;
+    }
+    .small-box h6 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .small-box p {
+        height: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
-    </head>
-<body>
+{% endblock style %}
+
+{% block content %}
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,17 +33,54 @@
 
         <!-- Main content -->
         <section class="content">
+            <br/>
+            <!-- /.card -->
             <div class="container-fluid">
                 <div class="row">
+                    
+                    {% for item in myitems %}
                     <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div>
+                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px;" alt="{{ item.image|default:'No image available' }}"><br />
+                            </div>
+                            <div class="inner" style="height: 150px; overflow: hidden;">
+                                <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.name }}</h6>
+                                <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">{{ item.description }}</p>
+                            </div>
+                            <a href="/item/{{ item.id }}" class="small-box-footer">More Info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+
+                    {% comment %} {% for item in myitems %}
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div >
+                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px" alt="{{ item.image }}"><br/>
+                            </div>
+                            <div class="inner">
+                                <h6>{{ item.name }}</h3>
+                                <p>{{ item.description }}</p>
+                            </div>
+                            <a href="/item/{{ item.id }}" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    
+                    {% endfor %} {% endcomment %}
+                    {% comment %} <div class="col-lg-3 col-6">
                         <!-- small box -->
                         <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>Post 01</h3>
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-building"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post01.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
                             <a href="/item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -42,13 +90,14 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>Post 02</h3>
-                                <p><details></details></p>
+                                    <h3>Post 02</h3>
+                                <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-users"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post02.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
-                            <a href="/receive/ReceiveStatusID = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/transfer/IsLargeAmount = 1" class="small-box-footer">more_info<i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -60,39 +109,43 @@
 
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fa fa-tasks"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post03.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
-                            <a href="/account" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-pink">
+                        <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>Post 04</h3>
 
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-tasks"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post04.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
-                            <a href="/bank_account" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/bank_item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
                     <!-- ./col -->
                 </div>
-                <div class="row">
+                <br />
+                {% comment %} <div class="row">
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-blue">
+                        <div class="small-box bg-danger">
                             <div class="inner">
                                     <h3>Post 05</h3>
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-money-bill-transfer"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post05.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
                             <a href="/transfer/IsLargeAmount = 1" class="small-box-footer">more_info<i class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -100,14 +153,15 @@
                     <!-- ./col -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-gradient-purple">
+                        <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>Post 06</h3>
 
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-money-bill-trend-up"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post06.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
                             <a href="/receive/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -115,14 +169,15 @@
                     <!-- ./col -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-green">
+                        <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>Post 07</h3>
 
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-exchange"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post07.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
                             <a href="/exchange/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
@@ -130,25 +185,24 @@
                     <!-- ./col -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-fuchsia">
+                        <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>Post 08</h3>
 
                                 <p>details</p>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-wallet"></i>
+                            <div >
+                                {% load static %}
+                                <img src="{% static 'post08.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
                             </div>
                             <a href="/item/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
-                </div>
+                </div> {% endcomment %}
             </div><!-- /.container-fluid -->
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-</body>
-</html>
+{% endblock content %}

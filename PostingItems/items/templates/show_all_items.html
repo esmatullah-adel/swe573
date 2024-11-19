@@ -1,20 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Add new item</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-      
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block script_before_body %}
+
+{% endblock %}
+
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Posts</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
             <!-- Default box -->
             <div class="card">
                 <div class="card-body">
-                    <a href="" class="btn btn-success btn-sm text-white" title="add new item">
-                        <i class="fa fa-plus" aria-hidden="true"></i><b> add new</b>
+                    <a href="/items/new/" class="btn btn-success btn-sm text-white" title="Post New Mystery Object">
+                        <i class="fa fa-plus" aria-hidden="true"></i><b> New Post</b>
                     </a>
                     <br/>
                     <br/>
@@ -26,19 +40,19 @@
                                 #
                             </th>
                             <th>
-                                name
+                                Name
                             </th>
                             <th>
-                                descriptions
+                                Descriptions
                             </th>
                             <th>
-                                size
+                                Size
                             </th>
                             <th>
-                                price
+                                Price
                             </th>
                             <th class="text-center">
-                                actions
+                                Actions
                             </th>
                         </tr>
                         </thead>
@@ -61,11 +75,11 @@
                                 {{ item.price }}
                             </td>
                             <td class="project-actions text-right">
-                                <a href="/item/{{item.id}}" title="view item"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> view</button></a>
-                                <a href="/item/edit/{{item.id}}" title="edit item"><button class="btn btn-primary btn-sm"><i class="fa fa-pen-square" aria-hidden="true"></i> edit</button></a>
+                                <a href="/item/show/" title="view item"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                                <a href="/item/edit/" title="edit item"><button class="btn btn-primary btn-sm"><i class="fa fa-pen-square" aria-hidden="true"></i></button></a>
                                 <form method="POST" action="/item/{{item.id}}" accept-charset="UTF-8" style="display:inline">
                                     
-                                    <button type="submit" class="btn btn-danger btn-sm" title="delete item" ><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" title="delete item" ><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -78,5 +92,116 @@
             </div>
             <!-- /.card -->
 
-</body>
-</html>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+{% block script %}
+    <!-- DataTables  & Plugins -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script >
+        $(document).ready(function() {
+
+            $('#example1').DataTable( {
+                order: [[0, 'desc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 },
+                    { searchable: false, targets: -1 },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        customize: function (doc) {
+                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    'colvis'
+                ]
+            } );
+
+            //for hiding flash message
+            setTimeout(function(){
+                $("#unsuccessMessage").remove();
+                $("#success").remove();
+            }, 2500 );
+        } );
+
+        function areYouSureFunc()
+        {
+            return confirm('Are you sure?');
+        }
+
+    </script>
+    {% endblock script %}
+
+    {% block last_style %}
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <style>
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding : 0px;
+            margin-left: 0px;
+            display: inline;
+            border: 0px;
+            gap: 0px; /* Remove spacing between buttons */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            border: 0px;
+        }
+    </style>
+    
+    {% endblock last_style %}
