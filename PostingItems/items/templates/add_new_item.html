@@ -103,39 +103,30 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Material</label>
-                                        <div class="form-group" style="display: flex; align-items: center;">
-                                            <select class="form-control select2" name="material_id" id="materialSelect" style="flex-grow: 1; margin-right: 10px; width: 100%;" required>
+                                            <select class="form-control select2" name="material_id" required>
                                               {% for material in materials %}
                                               <option value="{{ material.id }}">{{ material.title }}</option>
                                               {% endfor %}
                                             </select>
-                                            <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForMaterial" style="margin-left: auto;">+</button>
-                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Color</label>
-                                        <div class="form-group" style="display: flex; align-items: center;">
-                                            <select class="form-control select2" name="color_id" id="colorSelect" style="flex-grow: 1; margin-right: 10px; width: 100%;" required>
+                                            <select class="form-control select2" name="color_id" required>
                                               {% for color in colors %}
                                               <option value="{{ color.id }}">{{ color.title }}</option>
                                               {% endfor %}
                                             </select>
-                                            <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForColor" style="margin-left: auto;">+</button>
-                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Shape</label>
-                                        <div class="form-group" style="display: flex; align-items: center;">
-                                            <select class="form-control select2" name="shape_id" id="shapeSelect" style="flex-grow: 1; margin-right: 10px; width: 100%;" required>
+                                            <select class="form-control select2" name="shape_id" required>
                                               {% for shape in shapes %}
                                               <option value="{{ shape.id }}">{{ shape.title }}</option>
                                           {% endfor %}
                                             </select>
-                                            <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForShape" style="margin-left: auto;">+</button>
-                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="smell">Weight</label>
+                                        <label for="weight">Weight</label>
                                         <div class"form-group"  style="display: flex; align-items: center;">
                                         <input type="text" name="weight" class="form-control" style="flex-grow: 1; margin-right: 10px; width: 100%;">
                                         <select class="form-control select2" name="weight_unit_id" style="margin-left: auto;" required>
@@ -149,7 +140,7 @@
                                   </div>
                                     <div class="col-md-4">
                                       <div class="form-group">
-                                          <label for="smell">Location</label>
+                                          <label for="location">Location</label>
                                           <input type="text" name="location" class="form-control">
                                       </div>
                                       <div class="form-group">
@@ -168,47 +159,6 @@
                                     </div>
                                 </div>
                             </form>
-  
-  
-                              <!-- Modal for New Material -->
-                              <div class="modal fade" id="popupFormForMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="popupFormLabel">New Material</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- Form inside modal -->
-                                            <form id="newFormMaterial">
-                                              {% csrf_token %}
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                      <div class="form-group">
-                                                          <label for="inputName">Title</label>
-                                                          <input type="text" name="first_name" id="first_name_material" required class="form-control">
-                                                      </div>
-                                                        <div class="form-group" hidden>
-                                                            <input type="text" name="is_dialog" class="form-control" value="just for filling">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div id="error_message_material" class="alert alert-danger" style="display: none;"></div>
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                                Close</button>
-                                                            <button type="button" class="btn btn-primary" id="saveButtonForMaterial">
-                                                                Save</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-  
-  
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -251,94 +201,5 @@
           reader.readAsDataURL(file);
       }
   });
-
-
-
-
-        //add new material to the list
-        document.getElementById("saveButtonForMaterial").addEventListener("click", function(event) {
-            event.preventDefault();
-
-            // Get the first_name input element
-            const firstNameInput = document.getElementById("first_name_material");
-
-            // Reset any previous validity messages
-            firstNameInput.setCustomValidity('');
-
-            // Check if the first_name input is empty
-            if (!firstNameInput.value.trim()) {
-                // Set custom validity message
-                firstNameInput.setCustomValidity('Please fill out this field');
-
-                // Add Bootstrap's invalid class
-                firstNameInput.classList.add('is-invalid');
-
-                // Focus on the input
-                firstNameInput.focus();
-
-                return; // Prevent form submission
-            }
-
-            // Get the form element
-            const form = document.getElementById("newFormMaterial");
-            // Use FormData to gather all the form fields
-            const formData = new FormData(form);
-
-            // Convert FormData to a JSON object
-            const data = {};
-            formData.forEach((value, key) => { data[key] = value; });
-
-            // Send the data to the server via AJAX
-            fetch('{{material.store}}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token }}'  // For Laravel
-                },
-                body: JSON.stringify(data)  // Send the form data as JSON
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Create a new option with the returned ID
-                        const newOption = document.createElement("option");
-                        newOption.value = data.ID;  // Set the new ID as the option value
-                        newOption.textContent = data.Name;  // Use the first name as the option text
-
-                        // Append and select the new option in the select control
-                        const selectControl = document.getElementById("materialSelect");
-                        selectControl.appendChild(newOption);
-                        selectControl.value = data.ID;
-
-                        // Close the modal
-                        $('#popupFormForMaterial').modal('hide');
-                    } else {
-                        // Select the error message div
-                        const errorDiv = document.getElementById('error_message_material');
-
-                        // Display the error message
-                        errorDiv.style.display = 'block';
-                        errorDiv.textContent = data.Message;
-                    }
-                })
-                .catch(error => {
-                    // Select the error message div
-                    const errorDiv = document.getElementById('error_message_material');
-
-                    // Display the error message
-                    errorDiv.style.display = 'block';
-                    errorDiv.textContent = `Error: ${error.message}`;
-                });
-        });
-
-        <!-- JavaScript to handle Enter key press -->
-        document.getElementById('newFormMaterial').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Prevent the form from submitting
-                document.getElementById('saveButtonForMaterial').click(); // Trigger the Save button click
-            }
-        });
-
-
   </script>
 {% endblock script %}

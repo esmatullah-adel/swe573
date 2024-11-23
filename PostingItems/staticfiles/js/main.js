@@ -1,0 +1,1 @@
+console.log('this is simple message from dashboard page.');
