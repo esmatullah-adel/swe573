@@ -64,6 +64,13 @@
                                         <label for="id_username">Username:</label>
                                         {{ form.username }}
                                     </div>
+                                    {% if form.errors %}
+                                        <ul>
+                                            {% for field, errors in form.errors.items %}
+                                                <li>{{ field }}: {{ errors|join:", " }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-6">
                                     <div>
@@ -80,7 +87,7 @@
                                     </div>
                                     <br/>
                                         <div class="form-group">
-                                            <a href="/" class="btn btn-secondary">Cancel</a>
+                                            <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
                                             <button type="submit"  class="btn btn-success btn_block">Register</button>
                                         </div>
                                     </div>

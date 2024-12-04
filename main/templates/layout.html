@@ -335,7 +335,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/items/" class="nav-link ">
+                                <a href="/item/" class="nav-link ">
                                     <i class="fas fa-file-alt nav-icon"></i>
                                     <p>Posts</p>
                                 </a>
@@ -437,12 +437,13 @@
                                 </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/logoutFromHome" class="nav-link">
-                            <i class="nav-icon fas fa-sign-out-alt"></i>
-                            <p>
-                                logout
-                            </p>
-                        </a>
+                        <form method="POST" action="{% url 'logout' %}" style="display: inline; padding: 12px" class="nav-link ">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>Logout</p>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </nav>

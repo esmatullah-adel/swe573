@@ -41,15 +41,15 @@
                     {% for item in myitems %}
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div>
+                        <div class="small-box">
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
                                 <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px;" alt="{{ item.image|default:'No image available' }}"><br />
                             </div>
-                            <div class="inner" style="height: 150px; overflow: hidden;">
+                            <div class="inner" style="height: 100px; overflow: hidden;">
                                 <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.name }}</h6>
                                 <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">{{ item.description }}</p>
                             </div>
-                            <a href="/item/{{ item.id }}" class="small-box-footer">More Info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/item/{{ item.id }}" class="small-box-footer" style="background-color: blue">More Info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     {% endfor %}

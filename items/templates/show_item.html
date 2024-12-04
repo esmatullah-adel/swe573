@@ -1,315 +1,296 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Add new item</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Select2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+{% extends 'layout.html' %}
 
-<!-- jQuery (required for Select2) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% load static %}
 
-<!-- Select2 JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+{% block style %}
+
 <style>
-  #imagePreview {
-      max-width: 100%;
-      max-height: 300px;
-      display: none; /* Initially hidden */
-  }
-</style>
-</head>
-<body>
-        <!-- Main content -->
-        <section class="content">
+    .columns {
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .column {
+      width: 48%;  /* Adjust width to fit both columns */
+    }
+  </style>
+  <style>
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header styles */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    header h1 {
+      font-size: 2.5rem;
+      color: #333;
+    }
+    
+    .item-description {
+      font-size: 1.2rem;
+      color: #777;
+    }
+    
+    /* Item details section */
+    .item-details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    
+    .item-image {
+      flex: 1;
+      max-width: 400px;
+      margin-right: 20px;
+    }
+    
+    .item-image img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    
+    .item-info {
+      flex: 2;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .item-info p {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    
+    .item-info strong {
+      font-weight: bold;
+    }
+    
+    /* Related items section */
+    .item-related {
+      margin-top: 50px;
+    }
+    
+    .item-related h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .related-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .related-list li {
+      font-size: 1.1rem;
+      padding: 5px 0;
+    }
+    
+    /* Styling links */
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="content-wrapper">
+    {% comment %} <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>{{ item.name }}</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section> {% endcomment %}
+  </br>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Mystery Object</h3>
 
-          <div class="row">
-              <div class="col-md-9">
-                  <div class="card card-primary">
-                      <div class="card-header">
-                          <h3 class="card-title">Mystery Object</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse"><i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="container">
+                <div class="row">
+                  <header>
+                    <h1>{{ item.name }}</h1>
+                    <p class="item-description">{{ item.description }}</p>
+                  </header>
 
-                          <div class="card-tools">
-                              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                  <i class="fas fa-minus"></i>
-                              </button>
-                          </div>
+                  <section class="item-details">
+                    <div class="item-image">
+                      <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+                    </div>
+
+                    <div class="item-info">
+                        <div class="columns">
+                          <div class="column">
+                        <p>
+                          <strong>Dimensions:</strong> {{ item.length }} x {{ item.width }} x {{ item.height }} {{ length_unit.title }}
+                        </p>
+                        <p>
+                          <strong>Weight:</strong> {{ item.weight }} {{ weight_unit.title }}
+                        </p>
+                      {% if item.price > 0 %}
+                      <p>
+                        <strong>Price:</strong> {{ item.price }} {{ currency.title }}
+                      </p>
+                      {% endif %}
+                      <p>
+                        <strong>Taste:</strong> {{ item.taste }}
+                      </p>
+                      <p>
+                        <strong>Smell:</strong> {{ item.smell }}
+                      </p>
+                      <p>
+                        <strong>Functionality:</strong> {{ item.functionality }}
+                      </p>
+                      <strong>Materials:</strong> 
+                      {% for material in materials %}
+                                {{ material.title }}&nbsp;&nbsp;
+                              {% endfor %}
+                          </p>
+                              
+                            <p>
+                      <strong>Colors:</strong> 
+                      {% for color in colors %}
+                                {{ color.title }}&nbsp;&nbsp;
+                              {% endfor %}
+                          </p>
+                           
+                          <p>   
+                  <strong>Shapes:</strong> 
+                  {% for shape in shapes %}
+                            {{ shape.title }}&nbsp;&nbsp;
+                          {% endfor %}
+                      </p>
+                           
+                      <p>   
+              <strong>Tags:</strong> 
+              {% for tag in tags %}
+              <a href="https://www.wikidata.org/wiki/{{ tag.tag_id }}" target="_blank">{{ tag.title }}</a>&nbsp;&nbsp;
+                      {% endfor %}
+                  </p>
+                    </div>
+                    <div class="column">
+                      <p>
+                        <strong>Age:</strong> {{ item.age }}
+                      </p>
+                      <p>
+                        <strong>Condition:</strong> {{ condition.title }}
+                      </p>
+                      <p>
+                        <strong>Hardness:</strong> {{ hardness.title }}
+                      </p>
+                      <p>
+                        <strong>Location:</strong>
+                      </p>
+                      <div id="map" style="height: 200px; width: 100%;"></div>
+                    </div>
+                </div>
+                <p>
+                    </div>
+                  </section>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <section class="item-related">
+                          <h2>Comments</h2>
+                          <ul class="related-list">
+                            {% for comment in comments %}
+                              <li>{{ comment.title }}</li>
+                            {% endfor %}
+                          </ul>
+                        </section>
                       </div>
-                      <div class="card-body">
-                          <form action="{% url 'store_item' %}" method="post" enctype="multipart/form-data">
+                      <div class="form-group">
+                        
+                        <form action="/item/{{ item.id }}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                               <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="inputName">ID</label>
-                                        <input type="number" name="id" value="{{item_max_no}}" class="form-control" readonly>
+                                    <label for="test">Comment</label>
+                                    <textarea rows="3"  name="comment" class="form-control"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" name="name" class="form-control">
+                                        <button type="submit"  class="btn btn-success btn_block">Comment</button>
+                                        <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="description">Description</label>
-                                        <input type="text" name="description" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="tag">Tag</label>
-                                        <input type="text" name="tag" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="size">Size</label>
-                                        <input type="number" name="size" class="form-control" value="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="price">Price</label>
-                                        <input type="number" name="price" class="form-control" value="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                  <div class="form-group">
-                                      <label for="test">Taste</label>
-                                      <input type="text" name="taste" class="form-control">
-                                  </div>
-                                  <div class="form-group">
-                                      <label for="smell">Smell</label>
-                                      <input type="text" name="smell" class="form-control">
-                                  </div>
-                                  <div class="form-group">
-                                      <label>Material</label>
-                                      <div class="form-group" style="display: flex; align-items: center;">
-                                          <select class="form-control select2" name="material_id" id="materialSelect" style="flex-grow: 1; margin-right: 10px;" style="width: 100%;" required>
-                                            {% for material in materials %}
-                                            <option value="{{ material.id }}">{{ material.title }}</option>
-                                        {% endfor %}
-                                          </select>
-                                          <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForMaterial" style="margin-left: auto;">+</button>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label>Color</label>
-                                      <div class="form-group" style="display: flex; align-items: center;">
-                                          <select class="form-control select2" name="color_id" id="colorSelect" style="flex-grow: 1; margin-right: 10px;" style="width: 100%;" required>
-                                            {% for color in colors %}
-                                            <option value="{{ color.id }}">{{ color.title }}</option>
-                                        {% endfor %}
-                                          </select>
-                                          <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForColor" style="margin-left: auto;">+</button>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label>Shape</label>
-                                      <div class="form-group" style="display: flex; align-items: center;">
-                                          <select class="form-control select2" name="shape_id" id="shapeSelect" style="flex-grow: 1; margin-right: 10px;" style="width: 100%;" required>
-                                            {% for shape in shapes %}
-                                            <option value="{{ shape.id }}">{{ shape.title }}</option>
-                                        {% endfor %}
-                                          </select>
-                                          <button type="button" class="btn btn-success btn_block" data-toggle="modal" data-target="#popupFormForShape" style="margin-left: auto;">+</button>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <label for="smell">Weight</label>
-                                      <input type="text" name="weight" class="form-control">
-                                  </div>
-                                </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="smell">Location</label>
-                                        <input type="text" name="location" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="image">Image</label>
-                                      <!-- Image input field -->
-                                      <input type="file" id="imageInput" class="form-control" name="image" accept="image/*" required><br/>
-                                      
-                                      <!-- Preview area for the selected image -->
-                                      <img id="imagePreview" src="#" alt="Image Preview"><br/>
-                              
-                                    </div>
-                                      <div class="form-group">
-                                          <a href="/items" class="btn btn-secondary">Cancel</a>
-                                          <button type="submit"  class="btn btn-success btn_block">Post</button>
-                                      </div>
-                                  </div>
-                              </div>
                           </form>
-
-
-                            <!-- Modal for New Material -->
-                            <div class="modal fade" id="popupFormForMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-xl">
-                                  <div class="modal-content">
-                                      <div class="modal-header">
-                                          <h5 class="modal-title" id="popupFormLabel">New Material</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                          </button>
-                                      </div>
-                                      <div class="modal-body">
-                                          <!-- Form inside modal -->
-                                          <form id="newFormMaterial">
-                                            {% csrf_token %}
-                                              <div class="row">
-                                                  <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="inputName">Title</label>
-                                                        <input type="text" name="first_name" id="first_name_material" required class="form-control">
-                                                    </div>
-                                                      <div class="form-group" hidden>
-                                                          <input type="text" name="is_dialog" class="form-control" value="just for filling">
-                                                      </div>
-                                                      <div class="form-group">
-                                                          <div id="error_message_material" class="alert alert-danger" style="display: none;"></div>
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                              Close</button>
-                                                          <button type="button" class="btn btn-primary" id="saveButtonForMaterial">
-                                                              Save</button>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </form>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-
-
                       </div>
-                      <!-- /.card-body -->
-                  </div>
-                  <!-- /.card -->
+                </div>
               </div>
+            </div>
+            <!-- /.card-body -->
           </div>
-      </section>
-      <!-- /.content -->
+          <!-- /.card -->
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+{% endblock %}
 
+{% block script %}
+<script async 
+            defer 
+            src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap">
+    </script>
+    <script>
+        let map, marker;
 
-
-
-
-      
-  <script>
-    $(function () {
-        //Initialize Select2 Elements
-        $('.select2').select2()
-    });
-  </script>
-
-
-<script>
-  // Select the file input and image preview elements
-  const imageInput = document.getElementById('imageInput');
-  const imagePreview = document.getElementById('imagePreview');
-
-  // When a user selects an image, trigger the preview
-  imageInput.addEventListener('change', function (event) {
-      const file = event.target.files[0]; // Get the file from input
-      if (file) {
-          const reader = new FileReader(); // File reader to read the image file
-
-          reader.onload = function (e) {
-              // Set the image preview to the file's data URL
-              imagePreview.src = e.target.result;
-              imagePreview.style.display = 'block'; // Show the preview
-          };
-
-          // Read the file as a data URL
-          reader.readAsDataURL(file);
-      }
-  });
-
-
-
-
-        //add new material to the list
-        document.getElementById("saveButtonForMaterial").addEventListener("click", function(event) {
-            event.preventDefault();
-
-            // Get the first_name input element
-            const firstNameInput = document.getElementById("first_name_material");
-
-            // Reset any previous validity messages
-            firstNameInput.setCustomValidity('');
-
-            // Check if the first_name input is empty
-            if (!firstNameInput.value.trim()) {
-                // Set custom validity message
-                firstNameInput.setCustomValidity('Please fill out this field');
-
-                // Add Bootstrap's invalid class
-                firstNameInput.classList.add('is-invalid');
-
-                // Focus on the input
-                firstNameInput.focus();
-
-                return; // Prevent form submission
-            }
-
-            // Get the form element
-            const form = document.getElementById("newFormMaterial");
-            // Use FormData to gather all the form fields
-            const formData = new FormData(form);
-
-            // Convert FormData to a JSON object
-            const data = {};
-            formData.forEach((value, key) => { data[key] = value; });
-
-            // Send the data to the server via AJAX
-            fetch('{{material.store}}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token }}'  // For Laravel
-                },
-                body: JSON.stringify(data)  // Send the form data as JSON
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Create a new option with the returned ID
-                        const newOption = document.createElement("option");
-                        newOption.value = data.ID;  // Set the new ID as the option value
-                        newOption.textContent = data.Name;  // Use the first name as the option text
-
-                        // Append and select the new option in the select control
-                        const selectControl = document.getElementById("materialSelect");
-                        selectControl.appendChild(newOption);
-                        selectControl.value = data.ID;
-
-                        // Close the modal
-                        $('#popupFormForMaterial').modal('hide');
-                    } else {
-                        // Select the error message div
-                        const errorDiv = document.getElementById('error_message_material');
-
-                        // Display the error message
-                        errorDiv.style.display = 'block';
-                        errorDiv.textContent = data.Message;
-                    }
-                })
-                .catch(error => {
-                    // Select the error message div
-                    const errorDiv = document.getElementById('error_message_material');
-
-                    // Display the error message
-                    errorDiv.style.display = 'block';
-                    errorDiv.textContent = `Error: ${error.message}`;
-                });
-        });
-
-        <!-- JavaScript to handle Enter key press -->
-        document.getElementById('newFormMaterial').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Prevent the form from submitting
-                document.getElementById('saveButtonForMaterial').click(); // Trigger the Save button click
-            }
-        });
-
-
-</script>
-</body>
-</html>
+        function initMap() {
+            // Initialize the map centered on a default location
+            const userLocation = {
+                lat: {{ item.latitude }},
+                lng: {{ item.longitude }},
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: userLocation, // Temporary placeholder
+                zoom: 14,
+            });
+            // Add a draggable marker
+            marker = new google.maps.Marker({
+                position: userLocation,
+                map: map,
+            });
+        }
+    </script>
+{% endblock script %}

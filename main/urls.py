@@ -5,6 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('logout/', views.logout_view, name='logout'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

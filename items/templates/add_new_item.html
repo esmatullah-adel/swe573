@@ -6,16 +6,88 @@
 
   <!-- Select2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
   <style>
+
     #imagePreview {
         max-width: 100%;
         max-height: 300px;
         display: none; /* Initially hidden */
     }
-  </style>
-{% endblock style %}
+    
 
+
+
+    #tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .tag {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: relative;
+    }
+
+    .tag a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .tag a:hover {
+        text-decoration: underline;
+    }
+
+    .remove-tag {
+        cursor: pointer;
+        background-color: red;
+        color: white;
+        border: none;
+        font-size: 14px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .remove-tag:hover {
+        background-color: darkred;
+    }
+
+        #suggestions li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        #suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+    
+        #suggestions li span:first-child {
+            font-weight: bold;
+        }
+    
+        #suggestions li span:last-child {
+            font-size: 0.9em;
+            color: #666;
+        }
+    
+    
+</style>
+{% endblock style %}
 {% block content %}
 
 
@@ -50,22 +122,28 @@
                             <form action="{% url 'new_item' %}" method="post" enctype="multipart/form-data">
                               {% csrf_token %}
                                 <div class="row">
-                                  <div class="col-md-4">
+                                  <div class="col-md-3">
                                       <div class="form-group">
                                           <label for="inputName">ID</label>
                                           <input type="number" name="id" value="{{item_max_no}}" class="form-control" readonly>
                                       </div>
                                       <div class="form-group">
                                           <label for="name">Name</label>
-                                          <input type="text" name="name" class="form-control">
+                                          <input type="text" name="name" placeholder="Mystery object name." class="form-control">
                                       </div>
                                       <div class="form-group">
                                           <label for="description">Description</label>
-                                          <textarea rows="3"  name="description" class="form-control"></textarea>
+                                          <textarea rows="3"  name="description" placeholder="Describe your mystery object..." class="form-control"></textarea>
                                       </div>
                                       <div class="form-group">
                                           <label for="tag">Tag</label>
-                                          <input type="text" name="tag" class="form-control">
+                                          <input type="text" name="tag" class="form-control" id="search-field" placeholder="Search for a tag..." />
+                                          <ul id="suggestions"></ul>
+                                          <div id="tag-container"></div>
+                                          <!-- Hidden field for selected tag IDs -->
+                                          <input type="hidden" name="tag_ids" id="tags_id-field" value="">
+                                          <!-- Hidden field for selected tag Labels -->
+                                          <input type="hidden" name="tag_labels" id="tags_label-field" value="">
                                       </div>
                                       <div class="form-group">
                                           <label for="size">Size</label>
@@ -73,37 +151,74 @@
                                             <input type="text" name="width" placeholder="width" class="form-control" >
                                             <input type="text" name="length" placeholder="length" class="form-control" >
                                             <input type="text" name="height" placeholder="height" class="form-control" >
-                                            <select class="form-control select2" name="measurement_unit_id" style="margin-left: auto;" required>
-                                                {% for measurementUnit in measurementUnits %}
-                                                <option value="{{ measurementUnit.id }}">{{ measurementUnit.title }}</option>
-                                            {% endfor %}
-                                              </select>
+                                            <select class="form-control select2" name="length_unit_id" style="margin-left: auto;" required>
+                                                {% for lengthUnit in lengthUnits %}
+                                                <option value="{{ lengthUnit.id }}">{{ lengthUnit.title }}</option>
+                                                {% endfor %}
+                                            </select>
                                           </div>
                                       </div>
-                                      <div class="form-group">
-                                          <label for="price">Price</label>
-                                          <div class"form-group"  style="display: flex; align-items: center;">
-                                          <input type="number" name="price" class="form-control" value="0" style="flex-grow: 1; margin-right: 10px; width: 100%;">
-                                          <select class="form-control select2" name="currency_id" style="margin-left: auto;" required>
-                                            {% for currency in currencies %}
-                                            <option value="{{ currency.id }}">{{ currency.title }}</option>
-                                            {% endfor %}
-                                          </select>
-                                        </div>
-                                      </div>
                                   </div>
-                                  <div class="col-md-4">
+                                  <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="test">Taste</label>
-                                        <input type="text" name="taste" class="form-control">
+                                        <input type="text" name="taste" placeholder="tate of the object" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="smell">Smell</label>
-                                        <input type="text" name="smell" class="form-control">
+                                        <input type="text" name="smell" placeholder="smell of the object" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="functionality">Functionality</label>
+                                        <input type="text" name="functionality" placeholder="functionality of the object" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="age">Age</label>
+                                        <input type="text" name="age" placeholder="age for the object" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="weight">Weight</label>
+                                        <div class"form-group"  style="display: flex; align-items: center;">
+                                        <input type="number" placeholder="weight" name="weight" class="form-control" style="flex-grow: 1; margin-right: 10px; width: 100%;">
+                                        <select class="form-control select2" name="mass_unit_id" style="margin-left: auto;" required>
+                                            {% for weightUnit in weightUnits %}
+                                            <option value="{{ weightUnit.id }}">{{ weightUnit.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <div class"form-group"  style="display: flex; align-items: center;">
+                                        <input type="number" name="price" class="form-control" value="0" style="flex-grow: 1; margin-right: 10px; width: 100%;">
+                                        <select class="form-control select2" name="currency_id" style="margin-left: auto;" required>
+                                          {% for currency in currencies %}
+                                          <option value="{{ currency.id }}">{{ currency.title }}</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                                    </div>
+                                </div>
+                                  <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Condition</label>
+                                            <select class="form-control select2" name="condition" required>
+                                              {% for condition in conditions %}
+                                              <option value="{{ condition.id }}">{{ condition.title }}</option>
+                                              {% endfor %}
+                                            </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Hardness</label>
+                                            <select class="form-control select2" name="hardness" required>
+                                              {% for hardness in hardnesses %}
+                                              <option value="{{ hardness.id }}">{{ hardness.title }}</option>
+                                              {% endfor %}
+                                            </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Material</label>
-                                            <select class="form-control select2" name="material_id" required>
+                                            <select class="form-control select2" placeholder="select materials" name="materials[]" multiple required>
                                               {% for material in materials %}
                                               <option value="{{ material.id }}">{{ material.title }}</option>
                                               {% endfor %}
@@ -111,7 +226,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Color</label>
-                                            <select class="form-control select2" name="color_id" required>
+                                            <select class="form-control select2" name="colors[]" multiple required>
                                               {% for color in colors %}
                                               <option value="{{ color.id }}">{{ color.title }}</option>
                                               {% endfor %}
@@ -119,29 +234,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Shape</label>
-                                            <select class="form-control select2" name="shape_id" required>
+                                            <select class="form-control select2" name="shapes[]" multiple required>
                                               {% for shape in shapes %}
                                               <option value="{{ shape.id }}">{{ shape.title }}</option>
                                           {% endfor %}
                                             </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="weight">Weight</label>
-                                        <div class"form-group"  style="display: flex; align-items: center;">
-                                        <input type="text" name="weight" class="form-control" style="flex-grow: 1; margin-right: 10px; width: 100%;">
-                                        <select class="form-control select2" name="weight_unit_id" style="margin-left: auto;" required>
-                                            {% comment %} {% for currency in currencies %} {% endcomment %}
-                                            <option value="1">Gr</option>
-                                            <option value="2">KGr</option>
-                                            {% comment %} {% endfor %} {% endcomment %}
-                                          </select>
-                                        </div>
-                                    </div>
                                   </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                       <div class="form-group">
                                           <label for="location">Location</label>
-                                          <input type="text" name="location" class="form-control">
+                                          <div id="map" style="height: 200px; width: 100%;"></div>
+                                          <input type="hidden" id="latitude" name="latitude">
+                                          <input type="hidden" id="longitude" name="longitude">
                                       </div>
                                       <div class="form-group">
                                         <label for="image">Image</label>
@@ -153,7 +258,7 @@
                                 
                                       </div>
                                         <div class="form-group">
-                                            <a href="/items" class="btn btn-secondary">Cancel</a>
+                                            <a href="/item" class="btn btn-secondary">Cancel</a>
                                             <button type="submit"  class="btn btn-success btn_block">Post</button>
                                         </div>
                                     </div>
@@ -174,7 +279,53 @@
 {% block script %}
 <!-- Select2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script async 
+            defer 
+            src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap">
+    </script>
+    <script>
+        let map, marker;
 
+        function initMap() {
+            // Initialize the map centered on a default location
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 0, lng: 0 }, // Temporary placeholder
+                zoom: 14,
+            });
+            var userLocation;
+    // Try to get the user's current location
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+    
+            // Center the map on the user's location
+            map.setCenter(userLocation);
+            
+            // Add a draggable marker
+            marker = new google.maps.Marker({
+                position: userLocation,
+                title: "Is this the location?",
+                map: map,
+                draggable: true,
+            });
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+    
+            // Update hidden input fields when the marker is dragged
+            google.maps.event.addListener(marker, 'dragend', function(event) {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
+        }
+    </script>
 <script>
     $(function () {
         //Initialize Select2 Elements
@@ -201,5 +352,133 @@
           reader.readAsDataURL(file);
       }
   });
+
+
+  
+  
+  //for wiki data
+  
+
+  // Array to keep track of selected tags
+  const selectedTags = [];
+  const inputField = document.getElementById("search-field");
+  const tagsIDField = document.getElementById("tags_id-field");
+  const tagsLabelField = document.getElementById("tags_label-field");
+  
+  // Handle search input changes
+  inputField.addEventListener("input", function () {
+      const query = this.value.trim();
+      if (query.length > 0) {
+          fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${query}&language=en&format=json&origin=*`)
+              .then(response => response.json())
+              .then(data => showSuggestions(data.search));
+      } else {
+          clearSuggestions();
+      }
+  });
+  
+  function showSuggestions(suggestions) {
+      const suggestionBox = document.getElementById("suggestions");
+  
+      clearSuggestions(); // Clear old suggestions
+  
+      // Position the suggestion box dynamically below the input field
+      const rect = inputField.getBoundingClientRect();
+      suggestionBox.style.left = `${rect.left}px`;
+      suggestionBox.style.top = `${rect.bottom + window.scrollY}px`;
+      suggestionBox.style.width = `${rect.width}px`;
+      suggestionBox.style.display = "block"; // Make it visible
+  
+      // Populate suggestions
+      suggestions.forEach(item => {
+          const suggestionItem = document.createElement("li");
+          suggestionItem.style.display = "flex";
+          suggestionItem.style.flexDirection = "column";
+          suggestionItem.style.marginBottom = "5px";
+          suggestionItem.style.cursor = "pointer";
+  
+          // Create the name (label)
+          const name = document.createElement("span");
+          name.textContent = item.label;
+          name.style.fontWeight = "bold";
+  
+          // Create the description
+          const description = document.createElement("span");
+          description.textContent = item.description || "No description available";
+          description.style.fontSize = "0.9em";
+          description.style.color = "#666";
+  
+          // Append both name and description to the suggestion item
+          suggestionItem.appendChild(name);
+          suggestionItem.appendChild(description);
+  
+          // Add click event to select the tag
+          suggestionItem.onclick = () => {
+              addTagToUI({ id: item.id, label: item.label });
+              clearSuggestions();
+              inputField.value = "";
+          };
+  
+          suggestionBox.appendChild(suggestionItem);
+      });
+  }
+  
+  // Clear suggestions
+  function clearSuggestions() {
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = "";
+  }
+  
+  // Add a tag to the UI
+  function addTagToUI(tag) {
+      const tagContainer = document.getElementById("tag-container");
+  
+      // Prevent duplicate tags
+      if (selectedTags.find(t => t.id === tag.id)) {
+          alert("Tag already added!");
+          return;
+      }
+      selectedTags.push(tag);
+  
+      // Create tag element
+      const tagElement = document.createElement("div");
+      tagElement.className = "tag";
+  
+      // Add clickable link
+      const link = document.createElement("a");
+      link.href = `https://www.wikidata.org/wiki/${tag.id}`; // URL for the tag
+      link.target = "_blank"; // Open in a new tab
+      link.textContent = tag.label;
+  
+      // Add remove button
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-tag";
+      removeBtn.textContent = "x";
+      removeBtn.onclick = () => {
+          tagElement.remove();
+          selectedTags.splice(selectedTags.indexOf(tag), 1); // Remove from selectedTags
+          updateTagsField(); // Update hidden field when a tag is removed
+      };
+  
+      // Append link and remove button to tag element
+      tagElement.appendChild(link);
+      tagElement.appendChild(removeBtn);
+  
+      // Add tag element to container
+      tagContainer.appendChild(tagElement);
+  
+      // Update the hidden input field with selected tag IDs
+      updateTagsField();
+  }
+  
+  // Update the hidden field with selected tag IDs
+  function updateTagsField() {
+    const tagIds = selectedTags.map(tag => tag.id);
+    tagsIDField.value = tagIds.join(",");  // Set the value to a comma-separated string
+    const tagLabelss = selectedTags.map(tag => tag.label);
+    tagsLabelField.value = tagLabelss.join(",");  // Set the value to a comma-separated string
+  }
+  
+
   </script>
 {% endblock script %}

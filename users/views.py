@@ -18,7 +18,6 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, "users/login.html", { "form": form })
 
-@login_required(login_url="/users/login/")
 
 def users(request):
   myusers = User.objects.all().values()
@@ -35,12 +34,10 @@ def register_view(request):
         if form.is_valid():
             form.save()
             return redirect("users:users")
+        else:
+            # Print or log the errors for debugging
+            print(form.errors)
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {"form": form})
 
-
-def logout_view(request):
-    if request.method == "POST": 
-        logout(request) 
-        return redirect("/")
