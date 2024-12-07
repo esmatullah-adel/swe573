@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'PostingItems.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'swe573',
-        'USER': 'postgres',
-        'PASSWORD': 'asdf',
-        'HOST': 'localhost',  # Or your database server's IP
-        'PORT': '5432',       # Default PostgreSQL port
+        "NAME": os.environ.get("SQL_NAME"),
+        "USER": os.environ.get("SQL_USER"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD"),
+        "HOST": os.environ.get("HOST"),
+        "PORT": os.environ.get("PORT"),
     }
 }
 

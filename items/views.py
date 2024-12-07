@@ -90,7 +90,8 @@ def new_item(request):
         return redirect('items')  # Redirect to a list of items or a success page
     else:
     # Use the aggregate function to find the max value of the 'id' field
-      item_max_no = Item.objects.aggregate(Max('id'))['id__max'] + 1
+      item_max_no = Item.objects.aggregate(Max('id'))['id__max']
+      item_max_no = (item_max_no or 0) + 1
       materials = Material.objects.all()  # Retrieve all materials
       colors = Color.objects.all()  # Retrieve all colors
       shapes = Shape.objects.all()  # Retrieve all shapes
