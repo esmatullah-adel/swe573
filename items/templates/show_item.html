@@ -171,15 +171,21 @@
                         <strong>Price:</strong> {{ item.price }} {{ currency.title }}
                       </p>
                       {% endif %}
+                      {% if item.taste != "" %}
                       <p>
                         <strong>Taste:</strong> {{ item.taste }}
                       </p>
+                      {% endif %}
+                      {% if item.smell != "" %}
                       <p>
                         <strong>Smell:</strong> {{ item.smell }}
                       </p>
+                      {% endif %}
+                      {% if item.functionality != "" %}
                       <p>
                         <strong>Functionality:</strong> {{ item.functionality }}
                       </p>
+                      {% endif %}
                       <strong>Materials:</strong> 
                       {% for material in materials %}
                                 {{ material.title }}&nbsp;&nbsp;
@@ -208,9 +214,11 @@
                   </p>
                     </div>
                     <div class="column">
+                      {% if item.age != "" %}
                       <p>
                         <strong>Age:</strong> {{ item.age }}
                       </p>
+                      {% endif %}
                       <p>
                         <strong>Condition:</strong> {{ condition.title }}
                       </p>
@@ -228,20 +236,29 @@
                   </section>
 
                 </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <section class="item-related">
-                          <h2>Comments</h2>
-                          <ul class="related-list">
-                            {% for comment in comments %}
-                              <li>{{ comment.title }}</li>
-                            {% endfor %}
-                          </ul>
-                        </section>
+                <br />
+                <h2>Comments</h2>
+                {% for comment in comments %}
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-start">
+                      <div class="me-3">
+                        <a href="/user_profile/{{comment.user.id}}" class="text-primary fw-bold">{{ comment.user.first_name }}</a>
                       </div>
+                      <div>
+                        <small class="text-muted">{{ comment.date }}</small>
+                      </div>
+                    </div>
+                    <p class="mt-2 mb-0">
+                      {{ comment.title }}
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                <div class="row">
                       <div class="form-group">
-                        
-                        <form action="/item/{{ item.id }}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'show_item' item.id %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                               <div class="row">
                                 <div class="col-md-4">
@@ -256,6 +273,9 @@
                           </form>
                       </div>
                 </div>
+                {% else %}
+                <p>You must be logged in to comment.</p>
+                {% endif %}
               </div>
             </div>
             <!-- /.card-body -->

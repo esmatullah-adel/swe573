@@ -35,7 +35,7 @@
     <section class="content">
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Login User Details</h3>
@@ -51,7 +51,14 @@
                               {% csrf_token %}
                                 <div class="row">
                                   <div class="col-md-12">
-                                    {{ form }}
+                                    <div class="form-group">
+                                        <label for="id_username">Username:</label>
+                                        {{ form.username }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_password">Password:&nbsp;</label>
+                                        {{ form.password }}
+                                    </div>
                                     <br/>
                                         <div class="form-group">
                                             <a href="/" class="btn btn-secondary">Cancel</a>

@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block style %}
+
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  
+
+{% endblock style %}
+{% block content %}
+
+
+<div class="content-wrapper">
+
+    <br/>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header text-center">
+                        <h3 class="card-title">User Profile</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body text-center">
+                        <h3 class="mt-2 mb-0">{{ selected_user.first_name }}</h3>
+                        <p class="mt-2 mb-0">{{ selected_user.email }}</p>
+                        <p class="mt-2 mb-0">Total Posts: {{ total_posts }}</p>
+                        <p class="mt-2 mb-0">Total Comments: {{ total_comments }}</p>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>{{ user.first_name }} Recent Posts</h3>
+            </div>
+            <div class="col-md-6">
+                <h5>{{ user.first_name }} Recent Comments</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                    {% for post in posts %}
+                    
+                <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start">
+                        <div class="me-3">
+                          <a href="#" class="text-primary fw-bold">{{ comment.user.first_name }}</a>
+                        </div>
+                        <div>
+                          <small class="text-muted">{{ post.date }}</small>
+                        </div>
+                      </div>
+                      <div class="inner" style="height: 100px; overflow: hidden;">
+                          <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ post.name }}</h6>
+                          <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">{{ post.description }}</p>
+                      </div>
+                    </div>
+                  </div>
+                    {% comment %} <div class="col-lg-3 col-6">
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
+                                <img src="/media/{{ post.image }}" style="max-width: 100%; max-height: 100px;" alt="{{ post.image|default:'No image available' }}"><br />
+                            </div>
+                            <div class="inner" style="height: 100px; overflow: hidden;">
+                                <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ post.name }}</h6>
+                                <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">{{ post.description }}</p>
+                            </div>
+                            <a href="/post/{{ post.id }}" class="small-box-footer" style="background-color: blue">More Info <i class="fas fa-arrow-circle-right"></i></a>
+                        
+                    </div> {% endcomment %}
+                    {% endfor %}
+            </div>
+            <div class="col-md-6">
+                {% for comment in comments %}
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-start">
+                      <div class="me-3">
+                        <a href="#" class="text-primary fw-bold">{{ comment.user.first_name }}</a>
+                      </div>
+                      <div>
+                        <small class="text-muted">{{ comment.date }}</small>
+                      </div>
+                    </div>
+                    <p class="mt-2 mb-0">
+                      {{ comment.title }}
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+                <!-- /.card -->
+            </div>
+        </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User  # Default User model
 
 class LengthUnit(models.Model):
   title = models.CharField(max_length=255, null=True)
@@ -30,6 +31,7 @@ class Item(models.Model):
   image = models.ImageField(default='fallback.png', blank=True)
   latitude = models.FloatField(null=True)
   longitude = models.FloatField(null=True)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
   class Meta:
       db_table = "Item"
     
@@ -61,33 +63,33 @@ class Tag(models.Model):
       db_table = "Tag"
 
 class TagItem(models.Model):
-  item_id = models.CharField(max_length=255)
+  item_id = models.IntegerField()
   tag_id = models.CharField(max_length=255)
   class Meta:
       db_table = "TagItem"
 
 class MaterialItem(models.Model):
-  item_id = models.CharField(max_length=255)
-  material_id = models.CharField(max_length=255)
+  item_id = models.IntegerField()
+  material_id = models.IntegerField()
   class Meta:
       db_table = "MaterialItem"
 
 class ColorItem(models.Model):
-  item_id = models.CharField(max_length=255)
-  color_id = models.CharField(max_length=255)
+  item_id = models.IntegerField()
+  color_id = models.IntegerField()
   class Meta:
       db_table = "ColorItem"
 
 class ShapeItem(models.Model):
-  item_id = models.CharField(max_length=255)
-  shape_id = models.CharField(max_length=255)
+  item_id = models.IntegerField()
+  shape_id = models.IntegerField()
   class Meta:
       db_table = "ShapeItem"
 
 class Comment(models.Model):
   title = models.CharField(max_length=255)
-  item_id = models.CharField(max_length=255)
-  user_id = models.CharField(max_length=255, null=True)
+  item = models.ForeignKey(Item, on_delete=models.CASCADE, default=1)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
   date = models.CharField(max_length=255, null=True)
   class Meta:
       db_table = "Comment"

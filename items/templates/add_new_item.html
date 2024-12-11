@@ -180,7 +180,7 @@
                                         <label for="weight">Weight</label>
                                         <div class"form-group"  style="display: flex; align-items: center;">
                                         <input type="number" placeholder="weight" name="weight" class="form-control" style="flex-grow: 1; margin-right: 10px; width: 100%;">
-                                        <select class="form-control select2" name="mass_unit_id" style="margin-left: auto;" required>
+                                        <select class="form-control select2" name="weight_unit_id" style="margin-left: auto;" required>
                                             {% for weightUnit in weightUnits %}
                                             <option value="{{ weightUnit.id }}">{{ weightUnit.title }}</option>
                                             {% endfor %}
@@ -202,7 +202,7 @@
                                   <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Condition</label>
-                                            <select class="form-control select2" name="condition" required>
+                                            <select class="form-control select2" name="condition_id" required>
                                               {% for condition in conditions %}
                                               <option value="{{ condition.id }}">{{ condition.title }}</option>
                                               {% endfor %}
@@ -210,7 +210,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Hardness</label>
-                                            <select class="form-control select2" name="hardness" required>
+                                            <select class="form-control select2" name="hardness_id" required>
                                               {% for hardness in hardnesses %}
                                               <option value="{{ hardness.id }}">{{ hardness.title }}</option>
                                               {% endfor %}
@@ -312,10 +312,6 @@
                 map: map,
                 draggable: true,
             });
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
     
             // Update hidden input fields when the marker is dragged
             google.maps.event.addListener(marker, 'dragend', function(event) {
@@ -324,6 +320,15 @@
                 document.getElementById('latitude').value = lat;
                 document.getElementById('longitude').value = lng;
             });
+
+            //for this first time
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
         }
     </script>
 <script>

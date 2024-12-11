@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-#0xd_xhtn5b+!!%jsd#417zcc@ubxjmwmozo#jnuc6#8lsri!_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '212.38.94.95', 'swe573.zirakashna.com']
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,  "static")  # This is where your static files are stored
 ]
@@ -88,12 +88,18 @@ environ.Env.read_env()  # Reads the .env file
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': env('SQL_NAME'),
+        # 'USER': env('SQL_USER'),
+        # 'PASSWORD': env('SQL_PASSWORD'),
+        # 'HOST': env('HOST'),
+        # 'PORT': env('PORT'),
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('SQL_NAME'),
-        'USER': env('SQL_USER'),
-        'PASSWORD': env('SQL_PASSWORD'),
-        'HOST': env('HOST'),
-        'PORT': env('PORT'),
+        'NAME': 'swe573',           # Database name (SQL_NAME)
+        'USER': 'postgres',         # Username from DATABASE_URL
+        'PASSWORD': 'asdf',         # Password from DATABASE_URL
+        'HOST': '127.0.0.1',      # Host from DATABASE_URL
+        'PORT': '5432',             # Port from DATABASE_URL
     }
 }
 

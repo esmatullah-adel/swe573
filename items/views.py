@@ -18,11 +18,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 import json
+from datetime import datetime
 
 @login_required(login_url="/users/login/")
 def items(request):
   # Query to get items and related lengthunit data
-  myitems = Item.objects.all().select_related('length_unit').values('id', 'name', 'description', 'width', 'height', 'length', 'length_unit__title')
+  myitems = Item.objects.filter(user=request.user).select_related('length_unit').values('id', 'name', 'description', 'width', 'height', 'length', 'length_unit__title')
   template = loader.get_template('show_all_items.html')
   context = {
     'myitems': myitems,
@@ -38,6 +39,8 @@ def new_item(request):
         length = request.POST['length']
         height = request.POST['height']
         length_unit_id = request.POST['length_unit_id']
+        weight = request.POST['weight']
+        weight_unit_id = request.POST['weight_unit_id']
         price = request.POST['price']
         currency_id = request.POST['currency_id']
         condition_id = request.POST['condition_id']
@@ -49,9 +52,12 @@ def new_item(request):
         latitude = request.POST['latitude']
         longitude = request.POST['longitude']
         image = request.FILES['image']
-        item = Item(name=name, description=description, width=width, length=length, height=height, length_unit_id=length_unit_id, price=price
+        item = Item(name=name, description=description, width=width, length=length, height=height, length_unit_id=length_unit_id, weight=weight,
+                    weight_unit_id=weight_unit_id, price=price
                     , currency_id=currency_id, taste=taste, smell=smell, latitude=latitude, longitude=longitude, functionality=functionality
                     , age=age, condition_id=condition_id, hardness_id=hardness_id, image=image)
+        # Assign the logged-in user to the item
+        item.user = request.user
         # Save the item to the database
         item.save()
 
@@ -117,39 +123,49 @@ def new_item(request):
 
 
 def show_item(request, item_id):
-  template = loader.get_template('show_item.html')
-  # Fetch the main item
-  item = get_object_or_404(Item, id=item_id)
-  
-  # Fetch related objects
-  length_unit = item.length_unit  # Accessing the related LengthUnit object directly
-  weight_unit = WeightUnit.objects.filter(id=item.weight_unit_id).first()
-  currency = Currency.objects.filter(id=item.currency_id).first()
-  condition = Condition.objects.filter(id=item.condition_id).first()
-  hardness = Hardness.objects.filter(id=item.hardness_id).first()
+  if request.method == 'POST':
+    title = request.POST['comment']
+    user = request.user
+    date = datetime.now()
+    item = get_object_or_404(Item, id=item_id)
+    comment = Comment(title=title, item=item, user=user, date=date)
+    # Save the comment to the database
+    comment.save()
+    return redirect('/item/' + str(item_id))  # Redirect to a list of items or a success page
+  else:
+    template = loader.get_template('show_item.html')
+    # Fetch the main item
+    item = get_object_or_404(Item, id=item_id)
+    
+    # Fetch related objects
+    length_unit = item.length_unit  # Accessing the related LengthUnit object directly
+    weight_unit = WeightUnit.objects.filter(id=item.weight_unit_id).first()
+    currency = Currency.objects.filter(id=item.currency_id).first()
+    condition = Condition.objects.filter(id=item.condition_id).first()
+    hardness = Hardness.objects.filter(id=item.hardness_id).first()
 
-  # Related materials, colors, shapes, and tags
-  materials = Material.objects.filter(id__in=MaterialItem.objects.filter(item_id=item_id).values_list('material_id', flat=True))
-  colors = Color.objects.filter(id__in=ColorItem.objects.filter(item_id=item_id).values_list('color_id', flat=True))
-  shapes = Shape.objects.filter(id__in=ShapeItem.objects.filter(item_id=item_id).values_list('shape_id', flat=True))
-  tags = Tag.objects.filter(tag_id__in=TagItem.objects.filter(item_id=item_id).values_list('tag_id', flat=True))
-  comments = Comment.objects.filter(item_id=item_id).all()
+    # Related materials, colors, shapes, and tags
+    materials = Material.objects.filter(id__in=MaterialItem.objects.filter(item_id=item_id).values_list('material_id', flat=True))
+    colors = Color.objects.filter(id__in=ColorItem.objects.filter(item_id=item_id).values_list('color_id', flat=True))
+    shapes = Shape.objects.filter(id__in=ShapeItem.objects.filter(item_id=item_id).values_list('shape_id', flat=True))
+    tags = Tag.objects.filter(tag_id__in=TagItem.objects.filter(item_id=item_id).values_list('tag_id', flat=True))
+    comments = Comment.objects.filter(item_id=item_id).select_related('user')
 
-  context = {
-      'item': item,
-      'length_unit': length_unit,
-      'weight_unit': weight_unit,
-      'currency': currency,
-      'condition': condition,
-      'hardness': hardness,
-      'materials': materials,
-      'colors': colors,
-      'shapes': shapes,
-      'tags': tags,
-      'comments': comments,
-        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
-  }
-  return HttpResponse(template.render(context, request))
+    context = {
+        'item': item,
+        'length_unit': length_unit,
+        'weight_unit': weight_unit,
+        'currency': currency,
+        'condition': condition,
+        'hardness': hardness,
+        'materials': materials,
+        'colors': colors,
+        'shapes': shapes,
+        'tags': tags,
+        'comments': comments,
+          'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
+    }
+    return HttpResponse(template.render(context, request))
 
 def edit_item(request, item_id):
     # Use the aggregate function to find the max value of the 'id' field
