@@ -23,7 +23,7 @@ from datetime import datetime
 @login_required(login_url="/users/login/")
 def items(request):
   # Query to get items and related lengthunit data
-  myitems = Item.objects.filter(user=request.user).select_related('length_unit').values('id', 'name', 'description', 'width', 'height', 'length', 'length_unit__title')
+  myitems = Item.objects.filter(user=request.user).select_related('length_unit').values('id', 'name', 'description', 'width', 'height', 'length', 'length_unit__title', 'active')
   template = loader.get_template('show_all_items.html')
   context = {
     'myitems': myitems,
@@ -52,10 +52,11 @@ def new_item(request):
         latitude = request.POST['latitude']
         longitude = request.POST['longitude']
         image = request.FILES['image']
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         item = Item(name=name, description=description, width=width, length=length, height=height, length_unit_id=length_unit_id, weight=weight,
                     weight_unit_id=weight_unit_id, price=price
                     , currency_id=currency_id, taste=taste, smell=smell, latitude=latitude, longitude=longitude, functionality=functionality
-                    , age=age, condition_id=condition_id, hardness_id=hardness_id, image=image)
+                    , age=age, condition_id=condition_id, hardness_id=hardness_id, image=image, date=date)
         # Assign the logged-in user to the item
         item.user = request.user
         # Save the item to the database
@@ -126,7 +127,7 @@ def show_item(request, item_id):
   if request.method == 'POST':
     title = request.POST['comment']
     user = request.user
-    date = datetime.now()
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     item = get_object_or_404(Item, id=item_id)
     comment = Comment(title=title, item=item, user=user, date=date)
     # Save the comment to the database
@@ -190,6 +191,13 @@ def delete_item(request, id):
         return redirect('items')  # Replace with your item list view name
     return redirect('items')  # Redirect in case of a GET request
 
-
-def new_comment(request):
-    return redirect('items')
+def inactivate_item(request, id):
+    item = get_object_or_404(Item, id=id)
+    if item.active == 1:  # Assuming 'active' is an integer field
+        item.active = 0
+        messages.success(request, "Item inactivated successfully.")
+    else:
+        item.active = 1
+        messages.success(request, "Item activated successfully.")
+    item.save()
+    return redirect('items')  # Replace 'items' with your actual item list view name

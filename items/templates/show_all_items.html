@@ -70,7 +70,18 @@
                             </td>
                             <td class="project-actions text-right">
                                 <a href="{% url 'show_item' item.id %}" title="view item"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                <a href="/item/edit/{{ item.id }}" title="edit item"><button class="btn btn-primary btn-sm"><i class="fa fa-pen-square" aria-hidden="true"></i></button></a>
+                                <form method="POST" action="{% url 'inactivate_item' item.id %}" accept-charset="UTF-8" style="display:inline">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                    {% if item.active == 1 %} 
+                                        class="btn btn-danger btn-sm" title="Inactivate Item">
+                                        <i class="fa fa-ban" aria-hidden="true"></i>
+                                    {% else %} 
+                                        class="btn btn-primary btn-sm" title="Activate Item">
+                                        <i class="fa fa-sync-alt" aria-hidden="true"></i>
+                                    {% endif %}
+                                </button>
+                                </form>
                                 <form method="POST" action="{% url 'delete_item' item.id %}" accept-charset="UTF-8" style="display:inline">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm" title="delete item"><i class="fa fa-trash" aria-hidden="true"></i></button>

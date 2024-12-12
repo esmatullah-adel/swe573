@@ -32,6 +32,8 @@ class Item(models.Model):
   latitude = models.FloatField(null=True)
   longitude = models.FloatField(null=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+  date = models.CharField(max_length=255, null=True)
+  active = models.IntegerField(default=1)
   class Meta:
       db_table = "Item"
     

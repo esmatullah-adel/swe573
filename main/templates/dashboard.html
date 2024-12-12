@@ -23,6 +23,107 @@
         text-overflow: ellipsis;
     }
 </style>
+<style>
+
+    /* Popup container style */
+    .popup-container {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8); /* Black with opacity */
+      justify-content: center;
+      align-items: center;
+      z-index: 10000; /* Set a high z-index to bring the popup in front */
+    }
+
+    /* Popup image style */
+    .popup-container img {
+      max-width: 90%;
+      max-height: 90%;
+      border: 5px solid white;
+      border-radius: 8px;
+    }
+
+    /* Close button style */
+    .popup-container .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+
+    /* Zoom control container styles */
+    .zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        background-color: #f1f1f1;
+        padding: 10px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+  
+      /* Zoom percentage display */
+      .zoom-percentage {
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+  
+      /* Zoom control buttons */
+      .zoom-controls button:not(.reset-btn) {
+        font-size: 18px;
+        font-weight: bold;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        text-align: center;
+        cursor: pointer;
+        margin: 0 5px;
+        outline: none;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+  
+      .zoom-controls button:not(.reset-btn):hover {
+        background-color: #e1e1e1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      /* Reset button */
+.reset-btn {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 12px; /* Slightly rounded corners */
+    padding: 5px 15px; /* Padding for rounded rectangle shape */
+    width: auto; /* Let the width adjust dynamically based on content */
+    height: auto; /* Allow height to adjust dynamically */
+    cursor: pointer;
+    margin-left: 10px;
+    outline: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex; /* Center content */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .reset-btn:hover {
+    background-color: #e1e1e1;
+    text-decoration: none; /* Avoid underlining on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  </style>
 {% endblock style %}
 
 {% block content %}
@@ -43,7 +144,7 @@
                         <!-- small box -->
                         <div class="small-box">
                             <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
-                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px;" alt="{{ item.image|default:'No image available' }}"><br />
+                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px; cursor: pointer;" onclick="openPopup(this.src)" alt="{{ item.image|default:'No image available' }}"><br />
                             </div>
                             <div class="inner" style="height: 100px; overflow: hidden;">
                                 <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.name }}</h6>
@@ -205,4 +306,85 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+    
+        <!-- Popup container -->
+        <div class="popup-container" id="popupContainer">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <img id="popupImage" src="" alt="Popup Image">
+            <!-- Zoom controls -->
+            <!-- Styled Zoom controls -->
+            <div class="zoom-controls" id="zoom-controls">
+                <span class="zoom-percentage" id="zoomPercentage">100%</span>
+                <button onclick="zoomOut()">-</button>
+                <button onclick="zoomIn()">+</button>
+                <button class="reset-btn" onclick="resetZoom()">Reset</button>
+            </div>
+        </div>
 {% endblock content %}
+{% block script %}
+
+
+<script>
+    let scale = 1; // Initial scale
+
+    // Function to open the popup
+    function openPopup(imageSrc) {
+      const popupContainer = document.getElementById('popupContainer');
+      const popupImage = document.getElementById('popupImage');
+      popupImage.src = imageSrc; // Set the popup image source
+      popupContainer.style.display = 'flex'; // Show the popup
+      scale = 1; // Reset scale
+      updateZoom();
+    }
+
+    // Function to close the popup
+    function closePopup() {
+      const popupContainer = document.getElementById('popupContainer');
+      popupContainer.style.display = 'none'; // Hide the popup
+    }
+
+    // Function to zoom in
+    function zoomIn() {
+      scale += 0.1; // Increment scale
+      applyZoom();
+    }
+
+    // Function to zoom out
+    function zoomOut() {
+      if (scale > 0.2) { // Prevent scale from going below 0.2
+        scale -= 0.1; // Decrement scale
+        applyZoom();
+      }
+    }
+
+    // Function to reset zoom
+    function resetZoom() {
+      scale = 1; // Reset to original scale
+      applyZoom();
+    }
+
+    // Apply zoom transformation to the image
+    function applyZoom() {
+      const popupImage = document.getElementById('popupImage');
+      popupImage.style.transform = `scale(${scale})`;
+      updateZoom();
+    }
+
+    // Update zoom percentage display
+    function updateZoom() {
+      const zoomPercentage = document.getElementById('zoomPercentage');
+      zoomPercentage.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    // Add click event listener for closing when clicking outside
+    document.getElementById('popupContainer').addEventListener('click', function (event) {
+        const popupImage = document.getElementById('popupImage');
+        const zoomControls = document.getElementById('zoom-controls');
+      if (!popupImage.contains(event.target) && !zoomControls.contains(event.target)) {
+        closePopup();
+      }
+    }); 
+
+  </script>
+{% endblock %}
