@@ -15,13 +15,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyAVikG-qV4zAlTYaEVW7L32WmfEfKAjx2E'
+GOOGLE_MAPS_API_KEY = ''
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#0xd_xhtn5b+!!%jsd#417zcc@ubxjmwmozo#jnuc6#8lsri!_'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
