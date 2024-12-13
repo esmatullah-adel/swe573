@@ -140,7 +140,7 @@
                 <div class="row">
 
                     <div id="pagination-container">
-                        <div id="items-container" style="display: flex; flex-wrap: wrap; gap: -10px;">
+                        <div id="items-container" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: start;">
                             <!-- Items will be rendered here dynamically -->
                         </div>
                         <div id="pagination-controls" style="text-align: center; margin-top: 20px;">
@@ -149,6 +149,7 @@
                     </div>
 
             </div><!-- /.container-fluid -->
+            <br />
         </section>
         <!-- /.content -->
     </div>
@@ -171,24 +172,27 @@
 {% endblock content %}
 {% block script %}
 <script>
-    // Array of items (rendered on the server-side)
     const items = [
         {% for item in myitems %}
         {
             id: {{ item.id }},
-            image: "/media/{{ item.image }}",
+            image: "/media/{{ item.image }}", /* Ensure image URLs are absolute */
             name: "{{ item.name|escapejs }}",
             description: "{{ item.description|escapejs }}"
         },
         {% endfor %}
     ];
 
-    const itemsPerPage = 8; // Number of items per page
+    const itemsPerPage = 8;
     const itemsContainer = document.getElementById("items-container");
     const paginationControls = document.getElementById("pagination-controls");
 
-    // Function to render a specific page
+    // Keep track of the current page
+    let currentPage = 1;
+
     function renderPage(pageNumber) {
+        currentPage = pageNumber;
+
         // Clear the current items
         itemsContainer.innerHTML = "";
 
@@ -202,7 +206,9 @@
         // Render items
         pageItems.forEach(item => {
             const itemDiv = document.createElement("div");
-            itemDiv.className = "col-lg-3 col-6";
+            itemDiv.style.flex = "1 0 21%"; // Enforce consistent width
+            itemDiv.style.boxSizing = "border-box";
+            itemDiv.className = "small-box-container";
             itemDiv.innerHTML = `
                 <div class="small-box">
                     <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
@@ -217,25 +223,51 @@
             `;
             itemsContainer.appendChild(itemDiv);
         });
+
+        // Ensure layout consistency for fewer items
+        ensureGridLayout();
+
+        // Update the pagination controls to highlight the active page
+        updatePaginationControls();
     }
 
-    // Function to render pagination controls
-    function renderPaginationControls() {
-        const totalPages = Math.ceil(items.length / itemsPerPage);
+    function ensureGridLayout() {
+        // Add placeholder divs if there are fewer items than itemsPerPage
+        const totalItemsInPage = itemsContainer.children.length;
+        const placeholdersNeeded = itemsPerPage - totalItemsInPage;
 
+        for (let i = 0; i < placeholdersNeeded; i++) {
+            const placeholderDiv = document.createElement("div");
+            placeholderDiv.style.flex = "1 0 21%"; // Same size as normal items
+            placeholderDiv.style.boxSizing = "border-box";
+            placeholderDiv.className = "placeholder-box";
+            itemsContainer.appendChild(placeholderDiv);
+        }
+    }
+
+    function updatePaginationControls() {
+        const totalPages = Math.ceil(items.length / itemsPerPage);
         paginationControls.innerHTML = "";
 
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement("button");
             pageButton.innerText = i;
             pageButton.style.margin = "0 5px";
+            pageButton.style.padding = "5px 10px";
+            pageButton.style.cursor = "pointer";
+            pageButton.style.border = "1px solid #ccc";
+            pageButton.style.borderRadius = "5px";
+            pageButton.style.backgroundColor = i === currentPage ? "#007bff" : "#f8f9fa"; // Highlight the active page
+            pageButton.style.color = i === currentPage ? "#fff" : "#000";
+
+            // Set the onclick handler
             pageButton.onclick = () => renderPage(i);
+
             paginationControls.appendChild(pageButton);
         }
     }
 
     // Initial render
-    renderPaginationControls();
     renderPage(1); // Render the first page by default
 </script>
 
