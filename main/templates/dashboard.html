@@ -138,169 +138,16 @@
             <!-- /.card -->
             <div class="container-fluid">
                 <div class="row">
-                    
-                    {% for item in myitems %}
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box">
-                            <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
-                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px; cursor: pointer;" onclick="openPopup(this.src)" alt="{{ item.image|default:'No image available' }}"><br />
-                            </div>
-                            <div class="inner" style="height: 100px; overflow: hidden;">
-                                <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.name }}</h6>
-                                <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">{{ item.description }}</p>
-                            </div>
-                            <a href="/item/{{ item.id }}" class="small-box-footer" style="background-color: blue">More Info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    {% endfor %}
 
+                    <div id="pagination-container">
+                        <div id="items-container" style="display: flex; flex-wrap: wrap; gap: -10px;">
+                            <!-- Items will be rendered here dynamically -->
+                        </div>
+                        <div id="pagination-controls" style="text-align: center; margin-top: 20px;">
+                            <!-- Page numbers will be rendered here dynamically -->
+                        </div>
+                    </div>
 
-                    {% comment %} {% for item in myitems %}
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div >
-                                <img src="/media/{{ item.image }}" style="max-width: 100%; max-height: 100px" alt="{{ item.image }}"><br/>
-                            </div>
-                            <div class="inner">
-                                <h6>{{ item.name }}</h3>
-                                <p>{{ item.description }}</p>
-                            </div>
-                            <a href="/item/{{ item.id }}" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    
-                    {% endfor %} {% endcomment %}
-                    {% comment %} <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>Post 01</h3>
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post01.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                    <h3>Post 02</h3>
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post02.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/transfer/IsLargeAmount = 1" class="small-box-footer">more_info<i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>Post 03</h3>
-
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post03.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>Post 04</h3>
-
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post04.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/bank_item" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div> {% endcomment %}
-                    <!-- ./col -->
-                </div>
-                <br />
-                {% comment %} <div class="row">
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                    <h3>Post 05</h3>
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post05.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/transfer/IsLargeAmount = 1" class="small-box-footer">more_info<i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>Post 06</h3>
-
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post06.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/receive/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>Post 07</h3>
-
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post07.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/exchange/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>Post 08</h3>
-
-                                <p>details</p>
-                            </div>
-                            <div >
-                                {% load static %}
-                                <img src="{% static 'post08.jpg' %}" style="max-width: 100%; max-height: 100px" alt="Image Preview"><br/>
-                            </div>
-                            <a href="/item/IsLargeAmount = 1" class="small-box-footer">more_info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- ./col -->
-                </div> {% endcomment %}
             </div><!-- /.container-fluid -->
         </section>
         <!-- /.content -->
@@ -323,7 +170,74 @@
         </div>
 {% endblock content %}
 {% block script %}
+<script>
+    // Array of items (rendered on the server-side)
+    const items = [
+        {% for item in myitems %}
+        {
+            id: {{ item.id }},
+            image: "/media/{{ item.image }}",
+            name: "{{ item.name|escapejs }}",
+            description: "{{ item.description|escapejs }}"
+        },
+        {% endfor %}
+    ];
 
+    const itemsPerPage = 8; // Number of items per page
+    const itemsContainer = document.getElementById("items-container");
+    const paginationControls = document.getElementById("pagination-controls");
+
+    // Function to render a specific page
+    function renderPage(pageNumber) {
+        // Clear the current items
+        itemsContainer.innerHTML = "";
+
+        // Calculate the start and end indices
+        const start = (pageNumber - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        // Get the items for the current page
+        const pageItems = items.slice(start, end);
+
+        // Render items
+        pageItems.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "col-lg-3 col-6";
+            itemDiv.innerHTML = `
+                <div class="small-box">
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
+                        <img src="${item.image}" style="max-width: 100%; max-height: 100px; cursor: pointer;" onclick="openPopup('${item.image}')" alt="${item.name}">
+                    </div>
+                    <div class="inner" style="height: 100px; overflow: hidden;">
+                        <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</h6>
+                        <p style="height: 80px; overflow: hidden; text-overflow: ellipsis;">${item.description}</p>
+                    </div>
+                    <a href="/item/${item.id}" class="small-box-footer" style="background-color: blue">More Info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            `;
+            itemsContainer.appendChild(itemDiv);
+        });
+    }
+
+    // Function to render pagination controls
+    function renderPaginationControls() {
+        const totalPages = Math.ceil(items.length / itemsPerPage);
+
+        paginationControls.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement("button");
+            pageButton.innerText = i;
+            pageButton.style.margin = "0 5px";
+            pageButton.onclick = () => renderPage(i);
+            paginationControls.appendChild(pageButton);
+        }
+    }
+
+    // Initial render
+    renderPaginationControls();
+    renderPage(1); // Render the first page by default
+</script>
 
 <script>
     let scale = 1; // Initial scale
