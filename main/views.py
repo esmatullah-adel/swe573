@@ -122,11 +122,11 @@ def dashboard(request):
 
     print("Filter Criteria:", filter_criteria)
     # Apply filters and get results
-    myitems = list(Item.objects.filter(**filter_criteria).values())
+    myitems = list(Item.objects.filter(**filter_criteria).order_by('-id').values())
 
     return JsonResponse({'success': True, 'items': myitems})
   else:
-    myitems = Item.objects.all().values()
+    myitems = Item.objects.all().order_by('-id').values()
     materials = Material.objects.all()  # Retrieve all materials
     colors = Color.objects.all()  # Retrieve all colors
     shapes = Shape.objects.all()  # Retrieve all shapes
