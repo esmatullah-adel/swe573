@@ -264,7 +264,12 @@
                         <div class="columns">
                           <div class="column">
                         <p>
-                          <strong>Dimensions:</strong> {{ item.length }} x {{ item.width }} x {{ item.height }} {{ length_unit.title }}
+                          <strong>Dimensions:</strong>
+                        </p>
+                        <p>
+                          Length: {{ item.length }} {{ length_unit.title }} </p>
+                          <p> Width: {{ item.width }} {{ length_unit.title }} </p>
+                          <p> Height: {{ item.height }} {{ length_unit.title }}
                         </p>
                         <p>
                           <strong>Weight:</strong> {{ item.weight }} {{ weight_unit.title }}
@@ -331,7 +336,7 @@
                       <p>
                         <strong>Location:</strong>
                       </p>
-                      <div id="map" style="height: 200px; width: 100%;"></div>
+                      <div id="map" style="height: 300px; width: 100%;"></div>
                     </div>
                 </div>
                 <p>
@@ -374,6 +379,8 @@
                                     <div class="form-group">
                                       {% if item.active == 1 %}
                                         <button type="submit"  class="btn btn-success btn_block">Comment</button>
+                                        {% else %}
+                                        <p style="color: red;">This mysterious object is solved. You cannot write comment.</p>
                                         {% endif %}
                                         <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
                                     </div>

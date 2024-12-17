@@ -25,6 +25,80 @@
 </style>
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    
+
+    #tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .tag {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: relative;
+    }
+
+    .tag a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .tag a:hover {
+        text-decoration: underline;
+    }
+
+    .remove-tag {
+        cursor: pointer;
+        background-color: red;
+        color: white;
+        border: none;
+        font-size: 14px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .remove-tag:hover {
+        background-color: darkred;
+    }
+
+        #suggestions li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        #suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+    
+        #suggestions li span:first-child {
+            font-weight: bold;
+        }
+    
+        #suggestions li span:last-child {
+            font-size: 0.9em;
+            color: #666;
+        }
+    
+    
+</style>
 <style>
 
     /* Popup container style */
@@ -236,13 +310,13 @@
                         </div>
                         <div class="form-group">
                             <label for="age">Age</label>
-                            <input type="text" name="age" placeholder="age for the object" class="form-control">
+                            <input type="text" name="age" placeholder="age for the object in years" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="size">Age</label>
                             <div class="form-group"  style="display: flex; align-items: center;">
-                              <input type="text" name="min_age" placeholder="min" class="form-control" >
-                              <input type="text" name="max_age" placeholder="max" class="form-control" >
+                              <input type="text" name="min_age" placeholder="min years" class="form-control" >
+                              <input type="text" name="max_age" placeholder="max years" class="form-control" >
                             </div>
                         </div>
                         <div class="form-group">
@@ -294,13 +368,12 @@
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                            <label for="inputProjectLeader">Date</label>
-                            <div class="input-group date" id="date" data-target-input="nearest">
-                                <input type="text" name="date" class="form-control datetimepicker-input" data-target="#date">
-                                <div class="input-group-append" data-target="#date" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <label>Resolved/Unresolved</label>
+                                <select class="form-control select2" name="active">
+                                  <option value="">Both</option>
+                                  <option value="1">Unresolved</option>
+                                  <option value="0">Resolved</option>
+                                </select>
                         </div>
                         <div class="form-group">
                             <label>Condition</label>
@@ -343,6 +416,15 @@
                                   <option value="{{ shape.id }}">{{ shape.title }}</option>
                               {% endfor %}
                                 </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputProjectLeader">Date</label>
+                            <div class="input-group date" id="date" data-target-input="nearest">
+                                <input type="text" name="date" class="form-control datetimepicker-input" data-target="#date">
+                                <div class="input-group-append" data-target="#date" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="latitude">Latitude</label>
@@ -420,28 +502,39 @@
 <!-- Select2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
-  
-  $(document).on('shown.bs.modal', function (e) {
+    // Reset the form and retain Select2 state on modal hide
+$('#popupFormForAdvancedSearch').on('hidden.bs.modal', function () {
+    $(this).find('form')[0].reset(); // Reset the form
+
+    // If you need to clear Select2 selections as well:
+    $(this).find('.select2').val(null).trigger('change'); // Reset Select2 values
+});
+
+// Handle modal shown event for initializing plugins
+$(document).on('shown.bs.modal', function (e) {
     const modal = $(e.target); // The modal that triggered the event
 
     // Initialize Select2 within the modal
     modal.find('.select2').each(function () {
-        if (!$(this).data('select2')) { // Check if Select2 is already initialized
+        if (!$(this).data('select2')) { // Avoid reinitializing Select2
             $(this).select2({
-                dropdownParent: modal // Ensures dropdown is appended to the modal
+                dropdownParent: modal, // Ensure dropdown stays within the modal
+                width: '100%' // Optional: Ensure Select2 fits correctly
             });
         }
     });
 
     // Initialize datetimepicker within the modal
     modal.find('#date').each(function () {
-        if (!$(this).data('DateTimePicker')) { // Check if datetimepicker is already initialized
+        if (!$(this).data('DateTimePicker')) { // Avoid reinitializing datetimepicker
             $(this).datetimepicker({
-                format: 'YYYY-MM-DD'
+                format: 'YYYY-MM-DD', // Date format
+                useCurrent: false // Optional: Prevent default date selection
             });
         }
     });
 });
+
 
 
     const items = [
@@ -674,6 +767,132 @@
       closePopup();
     }
   }); 
+</script>
+<script>
+    
+  //for wiki data
+  
+
+  // Array to keep track of selected tags
+  const selectedTags = [];
+  const inputField = document.getElementById("search-field");
+  const tagsIDField = document.getElementById("tags_id-field");
+  const tagsLabelField = document.getElementById("tags_label-field");
+  
+  // Handle search input changes
+  inputField.addEventListener("input", function () {
+      const query = this.value.trim();
+      if (query.length > 0) {
+          fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${query}&language=en&format=json&origin=*`)
+              .then(response => response.json())
+              .then(data => showSuggestions(data.search));
+      } else {
+          clearSuggestions();
+      }
+  });
+  
+  function showSuggestions(suggestions) {
+      const suggestionBox = document.getElementById("suggestions");
+  
+      clearSuggestions(); // Clear old suggestions
+  
+      // Position the suggestion box dynamically below the input field
+      const rect = inputField.getBoundingClientRect();
+      suggestionBox.style.left = `${rect.left}px`;
+      suggestionBox.style.top = `${rect.bottom + window.scrollY}px`;
+      suggestionBox.style.width = `${rect.width}px`;
+      suggestionBox.style.display = "block"; // Make it visible
+  
+      // Populate suggestions
+      suggestions.forEach(item => {
+          const suggestionItem = document.createElement("li");
+          suggestionItem.style.display = "flex";
+          suggestionItem.style.flexDirection = "column";
+          suggestionItem.style.marginBottom = "5px";
+          suggestionItem.style.cursor = "pointer";
+  
+          // Create the name (label)
+          const name = document.createElement("span");
+          name.textContent = item.label;
+          name.style.fontWeight = "bold";
+  
+          // Create the description
+          const description = document.createElement("span");
+          description.textContent = item.description || "No description available";
+          description.style.fontSize = "0.9em";
+          description.style.color = "#666";
+  
+          // Append both name and description to the suggestion item
+          suggestionItem.appendChild(name);
+          suggestionItem.appendChild(description);
+  
+          // Add click event to select the tag
+          suggestionItem.onclick = () => {
+              addTagToUI({ id: item.id, label: item.label });
+              clearSuggestions();
+              inputField.value = "";
+          };
+  
+          suggestionBox.appendChild(suggestionItem);
+      });
+  }
+  
+  // Clear suggestions
+  function clearSuggestions() {
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = "";
+  }
+  
+  // Add a tag to the UI
+  function addTagToUI(tag) {
+      const tagContainer = document.getElementById("tag-container");
+  
+      // Prevent duplicate tags
+      if (selectedTags.find(t => t.id === tag.id)) {
+          alert("Tag already added!");
+          return;
+      }
+      selectedTags.push(tag);
+  
+      // Create tag element
+      const tagElement = document.createElement("div");
+      tagElement.className = "tag";
+  
+      // Add clickable link
+      const link = document.createElement("a");
+      link.href = `https://www.wikidata.org/wiki/${tag.id}`; // URL for the tag
+      link.target = "_blank"; // Open in a new tab
+      link.textContent = tag.label;
+  
+      // Add remove button
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-tag";
+      removeBtn.textContent = "x";
+      removeBtn.onclick = () => {
+          tagElement.remove();
+          selectedTags.splice(selectedTags.indexOf(tag), 1); // Remove from selectedTags
+          updateTagsField(); // Update hidden field when a tag is removed
+      };
+  
+      // Append link and remove button to tag element
+      tagElement.appendChild(link);
+      tagElement.appendChild(removeBtn);
+  
+      // Add tag element to container
+      tagContainer.appendChild(tagElement);
+  
+      // Update the hidden input field with selected tag IDs
+      updateTagsField();
+  }
+  
+  // Update the hidden field with selected tag IDs
+  function updateTagsField() {
+    const tagIds = selectedTags.map(tag => tag.id);
+    tagsIDField.value = tagIds.join(",");  // Set the value to a comma-separated string
+    const tagLabelss = selectedTags.map(tag => tag.label);
+    tagsLabelField.value = tagLabelss.join(",");  // Set the value to a comma-separated string
+  }
+  
 
 </script>
   {% endblock %}

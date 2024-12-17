@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from items.models import Material
 from items.models import Color
 from items.models import Shape
-from items.models import Currency, LengthUnit, WeightUnit, Condition, Hardness
+from items.models import Currency, LengthUnit, WeightUnit, Condition, Hardness, ColorItem, MaterialItem, ShapeItem, TagItem
 from django.http import JsonResponse
 import json
 
@@ -48,6 +48,14 @@ def dashboard(request):
     date = data.get('date', '').strip()
     latitude = data.get('latitude', '').strip()
     longitude = data.get('longitude', '').strip()
+    active = data.get('active', '')  # Do not use .strip() on this field
+    # Get the list of selected materials from the POST data
+    selected_materials = data.get("materials[]", [])  # List of selected material IDs
+    selected_colors = data.get("colors[]", [])  # List of selected colors
+    selected_shapes = data.get("shapes[]", [])  # List of selected shapes
+    selected_tags_ids = data.get("tag_ids", []).split(",")  # List of selected shapes
+    # Remove empty strings from selected_tags_ids because when no tags select selected_tags_ids contains ['']
+    selected_tags_ids = [tag_id for tag_id in selected_tags_ids if tag_id]
 
     # Build filter criteria dynamically
     filter_criteria = {}
@@ -93,6 +101,8 @@ def dashboard(request):
         filter_criteria['age'] = age
     if date:
         filter_criteria['date__icontains'] = date
+    if active:
+        filter_criteria['active'] = active
 
 
     if min_price:
@@ -119,6 +129,28 @@ def dashboard(request):
         filter_criteria['weight__gte'] = min_weight  # Minimum weight filter
     if max_weight:
         filter_criteria['weight__lte'] = max_weight  # Maximum weight filter
+
+    # Filter by materials if selected_materials is not empty
+    if selected_materials:
+        # Filter items where the related materials match the selected materials
+        filter_criteria['id__in'] = Item.objects.filter(
+            id__in=MaterialItem.objects.filter(material_id__in=selected_materials).values('item_id')
+        ).values('id')
+    if selected_colors:
+        # Filter items where the related colors match the selected colors
+        filter_criteria['id__in'] = Item.objects.filter(
+            id__in=ColorItem.objects.filter(color_id__in=selected_colors).values('item_id')
+        ).values('id')
+    if selected_shapes:
+        # Filter items where the related shapes match the selected shapes
+        filter_criteria['id__in'] = Item.objects.filter(
+            id__in=ShapeItem.objects.filter(shape_id__in=selected_shapes).values('item_id')
+        ).values('id')
+    if selected_tags_ids:
+        # Filter items where the related tags match the selected tags
+        filter_criteria['id__in'] = Item.objects.filter(
+            id__in=TagItem.objects.filter(tag_id__in=selected_tags_ids).values('item_id')
+        ).values('id')
 
     print("Filter Criteria:", filter_criteria)
     # Apply filters and get results

@@ -271,7 +271,7 @@
                             </p>
                         </a>
                     </li>
-                    {% comment %} <li class="nav-item">
+                     <li class="nav-item">
                         <a href="#" class="nav-link ">
                             <i class="fas fa-cogs nav-icon"></i>
                             <p>
@@ -281,37 +281,43 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/bank_deposit" class="nav-link ">
+                                <a href="/width/new" class="nav-link ">
                                     <i class="fas fa-ruler nav-icon"></i>
-                                    <p>Measurement Units</p>
+                                    <p>Length Units</p>
                                 </a>
                             </li>
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/bank_deposit" class="nav-link ">
+                                <a href="/weight/new" class="nav-link ">
+                                    <i class="fa fa-weight-hanging nav-icon"></i>
+                                    <p>Weight Units</p>
+                                </a>
+                            </li>
+                            <li class="nav-item" style="padding-inline-start: 10px">
+                                <a href="/currency/new" class="nav-link ">
                                     <i class="fas fa-money-bill-wave nav-icon"></i>
                                     <p>Currency</p>
                                 </a>
                             </li>
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/bank_deposit" class="nav-link ">
+                                <a href="/material/new" class="nav-link ">
                                     <i class="fas fa-cubes nav-icon"></i>
                                     <p>Materials</p>
                                 </a>
                             </li>
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/bank_deposit" class="nav-link ">
+                                <a href="/color/new" class="nav-link ">
                                     <i class="fas fa-paint-brush nav-icon"></i>
                                     <p>Colors</p>
                                 </a>
                             </li>
                             <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/bank_deposit" class="nav-link ">
+                                <a href="/shape/new" class="nav-link ">
                                     <i class="fas fa-gem nav-icon"></i>
                                     <p>Shapes</p>
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>{% comment %}
                     <li class="nav-item">
                         <a href="#" class="nav-link ">
                             <i class="nav-icon fas fa-user-cog"></i>
@@ -358,6 +364,12 @@
                             </li>
                         </ul>
                     </li> {% endcomment %}
+                    <li class="nav-item">
+                        <a href="/users/" class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                                 <a href="/user_profile/{{user.id}}" class="nav-link">

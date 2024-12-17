@@ -9,6 +9,7 @@ packaging==24.1
 pillow==11.0.0
 pipenv==2024.1.0
 platformdirs==4.3.6
+psycopg==3.2.3
 psycopg2-binary==2.9.10
 setuptools==75.6.0
 sqlparse==0.5.1

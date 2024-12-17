@@ -22,6 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('', include('main.urls')),
     path('', include('items.urls')),
+    path('', include('custom_settings.urls')),
     path('admin/', admin.site.urls),
     path('', include('users.urls')),  # Include without prefix
 ]

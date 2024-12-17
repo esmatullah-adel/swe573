@@ -48,9 +48,9 @@
                             <th style="width: 40%">
                                 Email
                             </th>
-                            <th class="text-center" style="width: 10%">
+                            {% comment %} <th class="text-center" style="width: 10%">
                                 Actions
-                            </th>
+                            </th> {% endcomment %}
                         </tr>
                         </thead>
                         <tbody>
@@ -68,12 +68,12 @@
                             <td>
                                 {{ user.email }}
                             </td>
-                            <td class="project-actions text-right">
+                            {% comment %} <td class="project-actions text-right">
                                 <form method="POST" action="/users/{{user.id}}" accept-charset="UTF-8" style="display:inline">
                                     
                                     <button type="submit" class="btn btn-danger btn-sm" title="Inactive User" ><i class="fas fa-ban nav-icon" aria-hidden="true"></i></button>
                                 </form>
-                            </td>
+                            </td> {% endcomment %}
                         </tr>
                         {% endfor %}
                         </tbody>
