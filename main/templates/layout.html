@@ -99,6 +99,10 @@
     {% endblock %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" >
+    
+    {% block start_of_body %}
+
+    {% endblock start_of_body %}
 
 <div class="wrapper">
 
@@ -114,83 +118,19 @@
                 <a href="/" class="nav-link">home</a>
             </li>
         </ul>
-
+        
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
 
-            <!-- Notifications Dropdown Menu -->
-            {% comment %} @if(isset($expiredDepositsCount) && $expiredDepositsCount != '0'){% endcomment %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-bs-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-info navbar-badge">23</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu dropdown-menu-end">
-                        <span class="dropdown-item dropdown-header">23 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="/deposit/" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> Notifications
-                        </a>
-                        <div class="dropdown-divider"></div>
-                    </div>
-                </li>
-            {% comment %}@endif {% endcomment %}
+            {% if request.path == "/" %}
             <!-- Navbar Search -->
-            <li class="nav-item" hidden>
-                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                    <i class="fas fa-search"></i>
-                </a>
-                <div class="navbar-search-block">
-                    <form class="form-inline">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
+             <li>
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#popupFormForAdvancedSearch">Search</a>
+             </li>
+            {% endif %}
 
             <ul class="navbar-nav ms-auto">
-                <!-- Authentication Links -->
-                {% comment %} @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('login') }}</a>
-                        </li>
-                    @endif
-                @else
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }}
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                {{ __('logout') }}
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                @endguest {% endcomment %}
                 {% if user.is_authenticated %}
-                    {% comment %} @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('login') }}</a>
-                        </li>
-                    @endif
-                @else {% endcomment %}
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ user.username }}
@@ -214,18 +154,6 @@
                     </li>
                     {% endif %} 
             </ul>
-            {% comment %} <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Config::get('languages')[App::getLocale()] }}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    @foreach (Config::get('languages') as $lang => $language)
-                        @if ($lang != App::getLocale())
-                            <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"> {{$language}}</a>
-                        @endif
-                    @endforeach
-                </div>
-            </li> {% endcomment %}
             <!-- Messages Dropdown Menu -->
             <li class="nav-item dropdown" hidden>
                 <a class="nav-link" data-toggle="dropdown" href="#">
@@ -300,31 +228,10 @@
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-{% comment %} {{--        <a href="#" class="brand-link">--}}
-{{--            <img src="{{ asset('dist/img/loading.gif') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">--}}
-{{--            <span class="brand-text font-weight-light">AdminLTE 3</span>--}}
-{{--        </a>--}} {% endcomment %}
-
+        
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
-            
-            {% comment %} {% if user.is_authenticated %}
-               <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                   <div class="image">
-                       @if(auth()->user()->profile_image != "")
-                           <img src="{{url('/storage/images/'.auth()->user()->profile_image)}}" class="img-circle elevation-2" alt="Image not found." onerror="this.src='';">
-                       @endif
-                   </div>
-                   <div class="info">
-                       <a href="/user_profile/{{ auth()->user()->ID }}" class="d-block">{{ auth()->user()->name }}</a>
-                   </div>
-               </div>
-           
-               {% else %}
-               <br>
-               {% endif %} {% endcomment %}
 
             <!-- Preview box -->
             <div class="zirakLogoSidebar" id="zirakLogoSidebar">
@@ -357,23 +264,14 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link ">
-                            <i class="fas fa-comment-dots nav-icon"></i>
+                        <a href="/item/" class="nav-link ">
+                            <i class="fas fa-file-alt nav-icon"></i>
                             <p>
-                                Posts
-                                <i class="right fas fa-angle-left"></i>
+                                My Posts
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item" style="padding-inline-start: 10px">
-                                <a href="/item/" class="nav-link ">
-                                    <i class="fas fa-file-alt nav-icon"></i>
-                                    <p>Posts</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a href="#" class="nav-link ">
                             <i class="fas fa-cogs nav-icon"></i>
                             <p>
@@ -459,7 +357,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> {% endcomment %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                                 <a href="/user_profile/{{user.id}}" class="nav-link">
@@ -488,22 +386,6 @@
      
      
      {% endblock content %}
-<!--
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2022 <a href="https://zirak.af">SWE573</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 1.0
-        </div>
-    </footer> -->
-    <!-- <footer class="sticky-footer">
-          <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-            <strong>Copyright &copy; 2022 <a href="https://zirak.af">SWE573</a>.</strong>
-               <span>Copyright © Your Website 2022</span>
-            </div>
-          </div>
-        </footer> -->
 
         <!-- Footer -->
 <footer>

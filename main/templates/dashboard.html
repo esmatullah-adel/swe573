@@ -23,6 +23,8 @@
         text-overflow: ellipsis;
     }
 </style>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 
     /* Popup container style */
@@ -125,9 +127,253 @@
   }
   </style>
 {% endblock style %}
+{% block start_of_body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Modal for Advanced Search -->
+<div class="modal fade" id="popupFormForAdvancedSearch" tabindex="-1" role="dialog" aria-labelledby="popupFormLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="popupFormLabel">Search Mystery Object</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Form inside modal -->
+              <form id="newFormAdvancedSearch" method="POST">
+                {% csrf_token %}
+                  <div class="row">
+                      
+                      <div class="col-md-4">
+                          <div class="form-group">
+                              <label for="inputName">ID</label>
+                              <input type="number" name="id" placeholder="Mystery object id." class="form-control">
+                          </div>
+                          <div class="form-group">
+                              <label for="name">Name</label>
+                              <input type="text" name="name" id="name" placeholder="Mystery object name." class="form-control">
+                          </div>
+                          <div class="form-group">
+                              <label for="description">Description</label>
+                              <textarea rows="3"  name="description" placeholder="Describe your mystery object..." class="form-control"></textarea>
+                          </div>
+                          <div class="form-group">
+                              <label for="tag">Tag</label>
+                              <input type="text" name="tag" class="form-control" id="search-field" placeholder="Search for a tag..." />
+                              <ul id="suggestions"></ul>
+                              <div id="tag-container"></div>
+                              <!-- Hidden field for selected tag IDs -->
+                              <input type="hidden" name="tag_ids" id="tags_id-field" value="">
+                              <!-- Hidden field for selected tag Labels -->
+                              <input type="hidden" name="tag_labels" id="tags_label-field" value="">
+                          </div>
+                          <div class="form-group">
+                              <label for="size">Size</label>
+                              <div class="form-group"  style="display: flex; align-items: center;">
+                                <input type="text" name="width" placeholder="width" class="form-control" >
+                                <input type="text" name="length" placeholder="length" class="form-control" >
+                                <input type="text" name="height" placeholder="height" class="form-control" >
+                                <select class="form-control select2" name="length_unit_id" style="margin-left: auto;">
+                                    {% for lengthUnit in lengthUnits %}
+                                    <option value="{{ lengthUnit.id }}">{{ lengthUnit.title }}</option>
+                                    {% endfor %}
+                                </select>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label for="size">Width</label>
+                              <div class="form-group"  style="display: flex; align-items: center;">
+                                <input type="text" name="min_width" placeholder="min" class="form-control" >
+                                <input type="text" name="max_width" placeholder="max" class="form-control" >
+                                <select class="form-control select2" name="length_unit_id" style="margin-left: auto;">
+                                    {% for lengthUnit in lengthUnits %}
+                                    <option value="{{ lengthUnit.id }}">{{ lengthUnit.title }}</option>
+                                    {% endfor %}
+                                </select>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label for="size">Height</label>
+                              <div class="form-group"  style="display: flex; align-items: center;">
+                                <input type="text" name="min_height" placeholder="min" class="form-control" >
+                                <input type="text" name="max_height" placeholder="max" class="form-control" >
+                                <select class="form-control select2" name="length_unit_id" style="margin-left: auto;">
+                                    {% for lengthUnit in lengthUnits %}
+                                    <option value="{{ lengthUnit.id }}">{{ lengthUnit.title }}</option>
+                                    {% endfor %}
+                                </select>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label for="size">Length</label>
+                              <div class="form-group"  style="display: flex; align-items: center;">
+                                <input type="text" name="min_length" placeholder="min" class="form-control" >
+                                <input type="text" name="max_length" placeholder="max" class="form-control" >
+                                <select class="form-control select2" name="length_unit_id" style="margin-left: auto;">
+                                    {% for lengthUnit in lengthUnits %}
+                                    <option value="{{ lengthUnit.id }}">{{ lengthUnit.title }}</option>
+                                    {% endfor %}
+                                </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="test">Taste</label>
+                            <input type="text" name="taste" placeholder="tate of the object" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="smell">Smell</label>
+                            <input type="text" name="smell" placeholder="smell of the object" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="functionality">Functionality</label>
+                            <input type="text" name="functionality" placeholder="functionality of the object" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="text" name="age" placeholder="age for the object" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Age</label>
+                            <div class="form-group"  style="display: flex; align-items: center;">
+                              <input type="text" name="min_age" placeholder="min" class="form-control" >
+                              <input type="text" name="max_age" placeholder="max" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight</label>
+                            <div class="form-group"  style="display: flex; align-items: center;">
+                            <input type="number" placeholder="weight" name="weight" class="form-control" style="flex-grow: 1; margin-right: 10px; width: 100%;">
+                            <select class="form-control select2" name="weight_unit_id" style="margin-left: auto;">
+                                {% for weightUnit in weightUnits %}
+                                <option value="{{ weightUnit.id }}">{{ weightUnit.title }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Weight</label>
+                            <div class="form-group"  style="display: flex; align-items: center;">
+                              <input type="text" name="min_weight" placeholder="min" class="form-control" >
+                              <input type="text" name="max_weight" placeholder="max" class="form-control" >
+                              <select class="form-control select2" name="weight_unit_id" style="margin-left: auto;">
+                                {% for weightUnit in weightUnits %}
+                                <option value="{{ weightUnit.id }}">{{ weightUnit.title }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <div class="form-group"  style="display: flex; align-items: center;">
+                            <input type="number" placeholder="price" name="price" class="form-control" value="" style="flex-grow: 1; margin-right: 10px; width: 100%;">
+                            <select class="form-control select2" name="currency_id" style="margin-left: auto;">
+                              {% for currency in currencies %}
+                              <option value="{{ currency.id }}">{{ currency.title }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Price</label>
+                            <div class="form-group"  style="display: flex; align-items: center;">
+                              <input type="text" name="min_price" placeholder="min" class="form-control" >
+                              <input type="text" name="max_price" placeholder="max" class="form-control" >
+                              <select class="form-control select2" name="currency_id" style="margin-left: auto;">
+                                {% for currency in currencies %}
+                                <option value="{{ currency.id }}">{{ currency.title }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="inputProjectLeader">Date</label>
+                            <div class="input-group date" id="date" data-target-input="nearest">
+                                <input type="text" name="date" class="form-control datetimepicker-input" data-target="#date">
+                                <div class="input-group-append" data-target="#date" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Condition</label>
+                                <select class="form-control select2" name="condition_id">
+                                  <option value="">No One</option>
+                                  {% for condition in conditions %}
+                                  <option value="{{ condition.id }}">{{ condition.title }}</option>
+                                  {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Hardness</label>
+                                <select class="form-control select2" name="hardness_id">
+                                  <option value="">No One</option>
+                                  {% for hardness in hardnesses %}
+                                  <option value="{{ hardness.id }}">{{ hardness.title }}</option>
+                                  {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Material</label>
+                                <select class="form-control select2" placeholder="select materials" name="materials[]" multiple>
+                                  {% for material in materials %}
+                                  <option value="{{ material.id }}">{{ material.title }}</option>
+                                  {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Color</label>
+                                <select class="form-control select2" name="colors[]" multiple>
+                                  {% for color in colors %}
+                                  <option value="{{ color.id }}">{{ color.title }}</option>
+                                  {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shape</label>
+                                <select class="form-control select2" name="shapes[]" multiple>
+                                  {% for shape in shapes %}
+                                  <option value="{{ shape.id }}">{{ shape.title }}</option>
+                              {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" name="latitude" placeholder="latitude here" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" name="longitude" placeholder="longitude here" class="form-control">
+                        </div>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <div id="error_message_walking_customer" class="alert alert-danger d-none" role="alert">
+                  <!-- Error messages will be dynamically displayed here -->
+              </div>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  Close
+              </button>
+              <button type="button" class="btn btn-primary" id="saveButtonForAdvancedSearch">
+                  Search
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock start_of_body %}
 
 {% block content %}
-
+<div id="resultsContainer"></div>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- /.content-header -->
@@ -171,7 +417,33 @@
         </div>
 {% endblock content %}
 {% block script %}
+<!-- Select2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
+  
+  $(document).on('shown.bs.modal', function (e) {
+    const modal = $(e.target); // The modal that triggered the event
+
+    // Initialize Select2 within the modal
+    modal.find('.select2').each(function () {
+        if (!$(this).data('select2')) { // Check if Select2 is already initialized
+            $(this).select2({
+                dropdownParent: modal // Ensures dropdown is appended to the modal
+            });
+        }
+    });
+
+    // Initialize datetimepicker within the modal
+    modal.find('#date').each(function () {
+        if (!$(this).data('DateTimePicker')) { // Check if datetimepicker is already initialized
+            $(this).datetimepicker({
+                format: 'YYYY-MM-DD'
+            });
+        }
+    });
+});
+
+
     const items = [
         {% for item in myitems %}
         {
@@ -269,68 +541,139 @@
 
     // Initial render
     renderPage(1); // Render the first page by default
-</script>
 
-<script>
-    let scale = 1; // Initial scale
+        // Add new walking customer to the list
+        document.getElementById("saveButtonForAdvancedSearch").addEventListener("click", function(event) {
+          event.preventDefault();
+      
+          // Get the form element
+          const form = document.getElementById("newFormAdvancedSearch");
+      
+          // Use FormData to gather all the form fields
+          const formData = new FormData(form);
+      
+          // Convert FormData to a JSON object
+          const data = {};
+          formData.forEach((value, key) => { data[key] = value.trim(); });
+      
+          // Get CSRF token from the meta tag
+          const csrfToken = formData.get('csrfmiddlewaretoken'); // Extract CSRF token
+      
+          // Send the data to the server via AJAX
+          fetch('{% url "dashboard" %}', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrfToken
+              },
+              body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+      
+                  // Update the items array with the new data
+            items.length = 0; // Clear existing items
+            data.items.forEach(item => {
+                items.push({
+                    id: item.id,
+                    image: `/media/${item.image}`, // Adjust if `item.image` is already a complete URL
+                    name: item.name,
+                    description: item.description
+                });
+            });
 
-    // Function to open the popup
-    function openPopup(imageSrc) {
-      const popupContainer = document.getElementById('popupContainer');
-      const popupImage = document.getElementById('popupImage');
-      popupImage.src = imageSrc; // Set the popup image source
-      popupContainer.style.display = 'flex'; // Show the popup
-      scale = 1; // Reset scale
-      updateZoom();
-    }
+            // Re-render pagination
+            renderPage(1); // Render the first page of the new items
+                  
+                  // Close the modal
+                  $('#popupFormForAdvancedSearch').modal('hide');
+                  setTimeout(() => {
+                      document.getElementById('popupFormForAdvancedSearch').classList.remove('show');
+                      document.getElementById('popupFormForAdvancedSearch').style.display = 'none';
+                      document.body.classList.remove('modal-open');
+                      const backdrop = document.querySelector('.modal-backdrop');
+                      if (backdrop) backdrop.remove();
+                  }, 1);
+              } else {
+                  // Display error message
+                  const errorDiv = document.getElementById('error_message_walking_customer');
+                  errorDiv.style.display = 'block';
+                  errorDiv.textContent = data.message || 'An error occurred.';
+              }
+          })
+          .catch(error => {
+              // Display error message
+              const errorDiv = document.getElementById('error_message_walking_customer');
+              errorDiv.style.display = 'block';
+              errorDiv.textContent = `Error: ${error.message}`;
+          });
+      });
+      
 
-    // Function to close the popup
-    function closePopup() {
-      const popupContainer = document.getElementById('popupContainer');
-      popupContainer.style.display = 'none'; // Hide the popup
-    }
-
-    // Function to zoom in
-    function zoomIn() {
-      scale += 0.1; // Increment scale
-      applyZoom();
-    }
-
-    // Function to zoom out
-    function zoomOut() {
-      if (scale > 0.2) { // Prevent scale from going below 0.2
-        scale -= 0.1; // Decrement scale
-        applyZoom();
-      }
-    }
-
-    // Function to reset zoom
-    function resetZoom() {
-      scale = 1; // Reset to original scale
-      applyZoom();
-    }
-
-    // Apply zoom transformation to the image
-    function applyZoom() {
-      const popupImage = document.getElementById('popupImage');
-      popupImage.style.transform = `scale(${scale})`;
-      updateZoom();
-    }
-
-    // Update zoom percentage display
-    function updateZoom() {
-      const zoomPercentage = document.getElementById('zoomPercentage');
-      zoomPercentage.textContent = `${Math.round(scale * 100)}%`;
-    }
-
-    // Add click event listener for closing when clicking outside
-    document.getElementById('popupContainer').addEventListener('click', function (event) {
-        const popupImage = document.getElementById('popupImage');
-        const zoomControls = document.getElementById('zoom-controls');
-      if (!popupImage.contains(event.target) && !zoomControls.contains(event.target)) {
-        closePopup();
-      }
-    }); 
 
   </script>
-{% endblock %}
+  
+<script>
+  let scale = 1; // Initial scale
+
+  // Function to open the popup
+  function openPopup(imageSrc) {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupImage = document.getElementById('popupImage');
+    popupImage.src = imageSrc; // Set the popup image source
+    popupContainer.style.display = 'flex'; // Show the popup
+    scale = 1; // Reset scale
+    updateZoom();
+  }
+
+  // Function to close the popup
+  function closePopup() {
+    const popupContainer = document.getElementById('popupContainer');
+    popupContainer.style.display = 'none'; // Hide the popup
+  }
+
+  // Function to zoom in
+  function zoomIn() {
+    scale += 0.1; // Increment scale
+    applyZoom();
+  }
+
+  // Function to zoom out
+  function zoomOut() {
+    if (scale > 0.2) { // Prevent scale from going below 0.2
+      scale -= 0.1; // Decrement scale
+      applyZoom();
+    }
+  }
+
+  // Function to reset zoom
+  function resetZoom() {
+    scale = 1; // Reset to original scale
+    applyZoom();
+  }
+
+  // Apply zoom transformation to the image
+  function applyZoom() {
+    const popupImage = document.getElementById('popupImage');
+    popupImage.style.transform = `scale(${scale})`;
+    updateZoom();
+  }
+
+  // Update zoom percentage display
+  function updateZoom() {
+    const zoomPercentage = document.getElementById('zoomPercentage');
+    zoomPercentage.textContent = `${Math.round(scale * 100)}%`;
+  }
+
+  // Add click event listener for closing when clicking outside
+  document.getElementById('popupContainer').addEventListener('click', function (event) {
+      const popupImage = document.getElementById('popupImage');
+      const zoomControls = document.getElementById('zoom-controls');
+    if (!popupImage.contains(event.target) && !zoomControls.contains(event.target)) {
+      closePopup();
+    }
+  }); 
+
+</script>
+  {% endblock %}
