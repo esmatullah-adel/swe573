@@ -74,10 +74,10 @@
                                     {% csrf_token %}
                                     <button type="submit" 
                                     {% if item.active == 1 %} 
-                                        class="btn btn-info btn-sm" title="Unresolve Item">
+                                        class="btn btn-info btn-sm" title="Resolve Item">
                                         <i class="fa fa-ban" aria-hidden="true"></i>
                                     {% else %} 
-                                        class="btn btn-primary btn-sm" title="Resolve Item">
+                                        class="btn btn-primary btn-sm" title="Unresolve Item">
                                         <i class="fa fa-sync-alt" aria-hidden="true"></i>
                                     {% endif %}
                                 </button>

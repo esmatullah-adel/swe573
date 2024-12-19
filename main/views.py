@@ -17,6 +17,7 @@ def dashboard(request):
     data = json.loads(request.body)
 
     # Extract fields from the request
+    id = data.get('id', '').strip()
     name = data.get('name', '').strip()
     description = data.get('description', '').strip()
     width = data.get('width', '').strip()
@@ -59,6 +60,8 @@ def dashboard(request):
 
     # Build filter criteria dynamically
     filter_criteria = {}
+    if id:
+        filter_criteria['id'] = id
     if name:
         filter_criteria['name__icontains'] = name
     if latitude:

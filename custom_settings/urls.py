@@ -8,4 +8,6 @@ urlpatterns = [
     path('shape/new/', views.new_shape, name='new_shape'),
     path('color/new/', views.new_color, name='new_color'),
     path('material/new/', views.new_material, name='new_material'),
+    path('condition/new/', views.new_condition, name='new_condition'),
+    path('hardness/new/', views.new_hardness, name='new_hardness'),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from items.models import Currency, Material, Shape, Color, WeightUnit, LengthUnit
+from items.models import Currency, Material, Shape, Color, WeightUnit, LengthUnit, Condition, Hardness
 from django.template import loader
 from django.db.models import Max  # Make sure this is imported
 from django.contrib.auth.decorators import login_required
@@ -154,4 +154,52 @@ def new_shape(request):
         'shape_max_no': shape_max_no,
       }
       return HttpResponse(template.render(context, request))
+
+
+def new_hardness(request):
+    if request.method == 'POST':
+        # Get form data, use .get() to avoid KeyError
+        hardness_id = request.POST.get('id')
+        title = request.POST.get('title')
+        
+        if hardness_id and title:
+            # Create a new Hardness object and save it
+            hardness = Hardness(id=hardness_id, title=title)
+            hardness.save()
+
+        return redirect('/')  # Redirect to a list of hardnesss or a success page
+    else:
+    # Use the aggregate function to find the max value of the 'id' field
+      hardness_max_no = Hardness.objects.aggregate(Max('id'))['id__max']
+      hardness_max_no = (hardness_max_no or 0) + 1
+      template = loader.get_template('hardness/add_new_hardness.html')
+      context = {
+        'hardness_max_no': hardness_max_no,
+      }
+      return HttpResponse(template.render(context, request))
+
+
+
+def new_condition(request):
+    if request.method == 'POST':
+        # Get form data, use .get() to avoid KeyError
+        condition_id = request.POST.get('id')
+        title = request.POST.get('title')
+        
+        if condition_id and title:
+            # Create a new Condition object and save it
+            condition = Condition(id=condition_id, title=title)
+            condition.save()
+
+        return redirect('/')  # Redirect to a list of conditions or a success page
+    else:
+    # Use the aggregate function to find the max value of the 'id' field
+      condition_max_no = Condition.objects.aggregate(Max('id'))['id__max']
+      condition_max_no = (condition_max_no or 0) + 1
+      template = loader.get_template('condition/add_new_condition.html')
+      context = {
+        'condition_max_no': condition_max_no,
+      }
+      return HttpResponse(template.render(context, request))
+
 
