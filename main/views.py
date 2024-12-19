@@ -72,23 +72,23 @@ def dashboard(request):
         filter_criteria['description__icontains'] = description
     if width:
         filter_criteria['width'] = width
-        if length_unit_id:
+        if 'length_unit_id' not in filter_criteria:
           filter_criteria['length_unit_id'] = length_unit_id
     if length:
         filter_criteria['length'] = length
-        if length_unit_id:
+        if 'length_unit_id' not in filter_criteria:
           filter_criteria['length_unit_id'] = length_unit_id
     if height:
         filter_criteria['height'] = height
-        if length_unit_id:
+        if 'length_unit_id' not in filter_criteria:
           filter_criteria['length_unit_id'] = length_unit_id
     if weight:
         filter_criteria['weight'] = weight
-        if weight_unit_id:
+        if 'weight_unit_id' not in filter_criteria:
           filter_criteria['weight_unit_id'] = weight_unit_id
     if price:
         filter_criteria['price'] = price
-        if currency_id:
+        if 'currency_id' not in filter_criteria:
           filter_criteria['currency_id'] = currency_id
     if condition_id:
         filter_criteria['condition_id'] = condition_id
@@ -110,28 +110,48 @@ def dashboard(request):
 
     if min_price:
         filter_criteria['price__gte'] = min_price  # Minimum price filter
+        if 'currency_id' not in filter_criteria:
+          filter_criteria['currency_id'] = currency_id
     if max_price:
         filter_criteria['price__lte'] = max_price  # Maximum price filter
+        if 'currency_id' not in filter_criteria:
+          filter_criteria['currency_id'] = currency_id
     if min_age:
         filter_criteria['age__gte'] = min_age  # Minimum age filter
     if max_age:
         filter_criteria['age__lte'] = max_age  # Maximum age filter
     if min_width:
         filter_criteria['width__gte'] = min_width  # Minimum width filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if max_width:
         filter_criteria['width__lte'] = max_width  # Maximum width filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if min_height:
         filter_criteria['height__gte'] = min_height  # Minimum height filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if max_height:
         filter_criteria['height__lte'] = max_height  # Maximum height filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if min_length:
         filter_criteria['length__gte'] = min_length  # Minimum length filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if max_length:
         filter_criteria['length__lte'] = max_length  # Maximum length filter
+        if 'length_unit_id' not in filter_criteria:
+          filter_criteria['length_unit_id'] = length_unit_id
     if min_weight:
         filter_criteria['weight__gte'] = min_weight  # Minimum weight filter
+        if 'weight_unit_id' not in filter_criteria:
+          filter_criteria['weight_unit_id'] = weight_unit_id
     if max_weight:
         filter_criteria['weight__lte'] = max_weight  # Maximum weight filter
+        if 'weight_unit_id' not in filter_criteria:
+          filter_criteria['weight_unit_id'] = weight_unit_id
 
     # Filter by materials if selected_materials is not empty
     if selected_materials:
