@@ -19,7 +19,8 @@ The **SWE573 Course Project** is a web application designed to assist individual
 - **Profile Management**: Personalized user profiles.
 - **Object Posting**: Post images or descriptions of unidentified objects.
 - **Commenting System**: Interact with posts through comments, suggestions, or insights.
-- **Notification System**: Get notified when others interact with your posts.
+- **Advanced Search Functionality**: Enhanced search capabilities, ensuring accurate and efficient querying of mystery object data.
+- **Geolocation Feature**: Integrated Google Maps API for setting object locations directly within the application.
 - **Responsive Design**: Optimized for accessibility and usability across devices.
 
 ## Technologies Used
