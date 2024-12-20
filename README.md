@@ -55,7 +55,7 @@ The **SWE573 Course Project** is a web application designed to assist individual
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Install the dependencies:
+3. Install the dependencies if prefer to not use docker:
    ```bash
    pip install -r requirements.txt
    ```
@@ -66,6 +66,7 @@ The **SWE573 Course Project** is a web application designed to assist individual
    DATABASE_URL=postgres://<username>:<password>@<host>:<port>/<database>
    SECRET_KEY=<your-django-secret-key>
    DEBUG=True
+   GOOGLE_MAPS_API_KEY=<your_own_google_map_api_key>
    ```
 
 5. Run database migrations:
@@ -73,9 +74,15 @@ The **SWE573 Course Project** is a web application designed to assist individual
    python manage.py migrate
    ```
 
-6. Start the development server:
+6. Start the development server if prefer to not use docker:
    ```bash
    python manage.py runserver
+   ```
+
+7. If you prefer to use docker, first install docker desktop from https://www.docker.com/products/docker-desktop/. After installation, run docker desktop and then run the following commands:
+   ```bash
+   docker-compose build
+   docker-compose up -d
    ```
 
 ## Usage
