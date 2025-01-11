@@ -344,7 +344,7 @@
                       <div class="col-md-4">
                         <div class="form-group">
                             <label>Resolved/Unresolved</label>
-                                <select class="form-control select2" name="active">
+                                <select class="form-control select2" style="width: 100%;" name="active">
                                   <option value="">Both</option>
                                   <option value="1">Unresolved</option>
                                   <option value="0">Resolved</option>
@@ -352,7 +352,7 @@
                         </div>
                         <div class="form-group">
                             <label>Condition</label>
-                                <select class="form-control select2" name="condition_id">
+                                <select class="form-control select2" style="width: 100%;" name="condition_id">
                                   <option value="">No One</option>
                                   {% for condition in conditions %}
                                   <option value="{{ condition.id }}">{{ condition.title }}</option>
@@ -361,7 +361,7 @@
                         </div>
                         <div class="form-group">
                             <label>Hardness</label>
-                                <select class="form-control select2" name="hardness_id">
+                                <select class="form-control select2" style="width: 100%;" name="hardness_id">
                                   <option value="">No One</option>
                                   {% for hardness in hardnesses %}
                                   <option value="{{ hardness.id }}">{{ hardness.title }}</option>
@@ -370,7 +370,7 @@
                         </div>
                         <div class="form-group">
                             <label>Material</label>
-                                <select class="form-control select2" placeholder="select materials" name="materials[]" multiple>
+                                <select class="form-control select2" style="width: 100%;" placeholder="select materials" name="materials[]" multiple>
                                   {% for material in materials %}
                                   <option value="{{ material.id }}">{{ material.title }}</option>
                                   {% endfor %}
@@ -378,7 +378,7 @@
                         </div>
                         <div class="form-group">
                             <label>Color</label>
-                                <select class="form-control select2" name="colors[]" multiple>
+                                <select class="form-control select2" style="width: 100%;" name="colors[]" multiple>
                                   {% for color in colors %}
                                   <option value="{{ color.id }}">{{ color.title }}</option>
                                   {% endfor %}
@@ -386,7 +386,7 @@
                         </div>
                         <div class="form-group">
                             <label>Shape</label>
-                                <select class="form-control select2" name="shapes[]" multiple>
+                                <select class="form-control select2" style="width: 100%;" name="shapes[]" multiple>
                                   {% for shape in shapes %}
                                   <option value="{{ shape.id }}">{{ shape.title }}</option>
                               {% endfor %}
@@ -477,39 +477,19 @@
 <!-- Select2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
-    // Reset the form and retain Select2 state on modal hide
-$('#popupFormForAdvancedSearch').on('hidden.bs.modal', function () {
-    $(this).find('form')[0].reset(); // Reset the form
+    
+    $(document).ready(function() {
+        // Initialize walking customer popup page Select2
+        $('.select2').select2({
+            dropdownParent: $('#popupFormForAdvancedSearch')
+        });
 
-    // If you need to clear Select2 selections as well:
-    $(this).find('.select2').val(null).trigger('change'); // Reset Select2 values
-});
 
-// Handle modal shown event for initializing plugins
-$(document).on('shown.bs.modal', function (e) {
-    const modal = $(e.target); // The modal that triggered the event
-
-    // Initialize Select2 within the modal
-    modal.find('.select2').each(function () {
-        if (!$(this).data('select2')) { // Avoid reinitializing Select2
-            $(this).select2({
-                dropdownParent: modal, // Ensure dropdown stays within the modal
-                width: '100%' // Optional: Ensure Select2 fits correctly
-            });
-        }
+        //Date picker
+        $('#date').datetimepicker({
+            format: 'YYYY-MM-DD   HH:mm:ss'
+        });
     });
-
-    // Initialize datetimepicker within the modal
-    modal.find('#date').each(function () {
-        if (!$(this).data('DateTimePicker')) { // Avoid reinitializing datetimepicker
-            $(this).datetimepicker({
-                format: 'YYYY-MM-DD', // Date format
-                useCurrent: false // Optional: Prevent default date selection
-            });
-        }
-    });
-});
-
 
 
     const items = [

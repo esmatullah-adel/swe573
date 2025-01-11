@@ -26,7 +26,7 @@ SECRET_KEY = ''
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '212.38.94.95', 'swe573.zirakashna.com']
+ALLOWED_HOSTS = ['127.0.0.1', '212.38.94.95', 'esmatullah.zirakashna.com']
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,  "static")  # This is where your static files are stored
 ]
