@@ -33,25 +33,49 @@ def items(request):
 def new_item(request):
     if request.method == 'POST':
         
-        name = request.POST['name']
-        description = request.POST['description']
-        width = request.POST['width']
-        length = request.POST['length']
-        height = request.POST['height']
-        length_unit_id = request.POST['length_unit_id']
-        weight = request.POST['weight']
-        weight_unit_id = request.POST['weight_unit_id']
-        price = request.POST['price']
-        currency_id = request.POST['currency_id']
-        condition_id = request.POST['condition_id']
-        hardness_id = request.POST['hardness_id']
-        taste = request.POST['taste']
-        smell = request.POST['smell']
-        functionality = request.POST['functionality']
-        age = request.POST['age']
-        latitude = request.POST['latitude']
-        longitude = request.POST['longitude']
-        image = request.FILES['image']
+        name = request.POST.get('name', '')
+        description = request.POST.get('description', '')
+        width = request.POST.get('width', '0')
+        length = request.POST.get('length', '0')
+        height = request.POST.get('height', '0')
+        length_unit_id = request.POST.get('length_unit_id', '1')
+        weight = request.POST.get('weight', '0')  # Default to '0'
+        try:
+            weight = float(weight)  # Convert to float, if possible
+        except ValueError:
+            weight = 0  # Default to 0 if conversion fails
+        try:
+            width = float(width)  # Convert to float, if possible
+        except ValueError:
+            width = 0  # Default to 0 if conversion fails
+        try:
+            length = float(length)  # Convert to float, if possible
+        except ValueError:
+            length = 0  # Default to 0 if conversion fails
+        try:
+            height = float(height)  # Convert to float, if possible
+        except ValueError:
+            height = 0  # Default to 0 if conversion fails
+        weight_unit_id = request.POST.get('weight_unit_id', '1')
+        price = request.POST.get('price', '0')
+        currency_id = request.POST.get('currency_id', '1')
+        condition_id = request.POST.get('condition_id', '1')
+        hardness_id = request.POST.get('hardness_id', '1')
+        taste = request.POST.get('taste', '')
+        smell = request.POST.get('smell', '')
+        functionality = request.POST.get('functionality', '')
+        age = request.POST.get('age', '0')
+        latitude = request.POST.get('latitude', '0')
+        longitude = request.POST.get('longitude', '0')
+        try:
+            latitude = float(latitude)  # Convert to float, if possible
+        except ValueError:
+            latitude = 0  # Default to 0 if conversion fails
+        try:
+            longitude = float(longitude)  # Convert to float, if possible
+        except ValueError:
+            longitude = 0  # Default to 0 if conversion fails
+        image = request.FILES.get('image', None)
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         item = Item(name=name, description=description, width=width, length=length, height=height, length_unit_id=length_unit_id, weight=weight,
                     weight_unit_id=weight_unit_id, price=price
